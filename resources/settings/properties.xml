@@ -1,0 +1,6 @@
+<properties>
+
+    <property id="WindDir" type="number">0</property>
+    <property id="DrawPolarCogPlot" type="boolean">true</property>
+
+</properties>

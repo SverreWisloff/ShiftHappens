@@ -1,0 +1,11 @@
+<settings>
+
+    <setting propertyKey="@Properties.WindDir" title="@Strings.WindDir">
+        <settingConfig type="numeric" />
+    </setting>
+
+    <setting propertyKey="@Properties.DrawPolarCogPlot" title="@Strings.DrawPolarCogPlot">
+        <settingConfig type="boolean" />
+    </setting>
+
+</settings>

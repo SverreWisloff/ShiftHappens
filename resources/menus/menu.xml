@@ -1,0 +1,4 @@
+<menu id="MainMenu">
+    <menu-item id="idSetPortWD" label="@Strings.menu_label_SetPortWD" />
+    <menu-item id="idSetStarbWD" label="@Strings.menu_label_SetStarbWD" />
+</menu>
