@@ -1,5 +1,6 @@
 import Toybox.Graphics;
 import Toybox.WatchUi;
+using Toybox.Application as App;
 
 function reduse_deg(deg) {
 	if (deg<0) 		{	deg += 360; }
@@ -54,6 +55,22 @@ class ShiftHappensView extends WatchUi.View {
     function onShow() as Void {
     }
 
+    function startStopRecording() as Void {
+        System.println("View.startStopRecording()");
+        var app = App.getApp();
+
+        if (_ui.m_bRecording) {
+            // Stop recording
+            _ui.m_bRecording = false;
+            app.stopRecording();
+            
+        } else {
+            // Start recording
+            _ui.m_bRecording = true;
+            app.startRecording();
+        }
+    }
+
     function setWindDir(WindDir) as Void {
         System.println("View.setWindDir( " + WindDir + " ) " );
         _ui.m_WindDirection = WindDir;
@@ -101,7 +118,9 @@ class ShiftHappensView extends WatchUi.View {
 
 
         // Draw the tick marks around the edges of the screen
-        _ui.drawHashMarks(dc);        
+        _ui.drawHashMarks(dc);
+        // Draws a red round record indicator
+        _ui.drawRecordIndicator(dc);      
         // Draw North arrow
         _ui.drawNorth(dc);
         // Draw boat

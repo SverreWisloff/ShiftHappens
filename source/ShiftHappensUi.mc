@@ -12,6 +12,7 @@ class ShiftHappensUi {
     var m_posnInfo = null;
     var m_width;
     var m_height;
+	var m_bRecording = false;
     var m_WindDirection=0;
     var m_WindDirStarboard=0;
     var m_WindDirPort=0;
@@ -24,6 +25,23 @@ class ShiftHappensUi {
     var m_bDrawOrthogonalCogPlot=false;
     var m_bDrawPolarCogPlot=true;
     var m_boatScale=1.2;
+
+    //=====================
+    // Draws a red round record indicator
+    //=====================
+    public function drawRecordIndicator(dc as Dc) {
+        m_width = dc.getWidth();
+        m_height = dc.getHeight();
+
+		dc.setColor(Graphics.COLOR_RED, Graphics.COLOR_TRANSPARENT);
+		dc.drawCircle(m_width/2*1.5, m_width/2*0.7, 7);
+
+		if (m_bRecording) {
+			dc.setColor(Graphics.COLOR_RED, Graphics.COLOR_TRANSPARENT);
+			dc.fillCircle(m_width/2*1.5, m_width/2*0.7, 5);
+		}
+
+    }
 
     //=====================
     // Draws the clock tick marks around the outside edges of the screen.

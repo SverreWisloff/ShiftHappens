@@ -23,6 +23,7 @@ class ShiftHappensDelegate extends WatchUi.BehaviorDelegate {
         //KEY_DOWN, 
         if (keyEvent.getKey()==KEY_ENTER){
         	//Start stop recording
+            _parentView.startStopRecording();
             System.println("KEY_ENTER");
         }
         else if (keyEvent.getKey()==KEY_UP){

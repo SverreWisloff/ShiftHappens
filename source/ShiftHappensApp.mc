@@ -28,8 +28,15 @@ class ShiftHappensApp extends Application.AppBase {
         Position.enableLocationEvents(Position.LOCATION_CONTINUOUS, method(:onPosition));
         
         // Start the recording of a activity-session to the FIT-file
-        _shFit.onTimerStart();
+        // _shFit.onTimerStart();
 
+    }
+
+    function startRecording() as Void {
+        _shFit.onTimerStart();
+    }
+    function stopRecording() as Void {
+        _shFit.onTimerStop();
     }
 
     function update() {
