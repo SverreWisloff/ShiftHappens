@@ -92,6 +92,8 @@ _Include the project's license information._
 - Support for fenix 6 and 7 watches. 
 
 ## Notes to self while coding
+- [SunEclipticAnalog](https://github.com/SverreWisloff/SunEclipticAnalog?tab=readme-ov-file#notes-to-self-while-coding)
+- [SunFacing](https://github.com/SverreWisloff/SunFacing?tab=readme-ov-file#notes-to-self-while-coding)
 - xxx
 
 ## TODO
