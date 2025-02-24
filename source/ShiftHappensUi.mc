@@ -34,11 +34,12 @@ class ShiftHappensUi {
         m_height = dc.getHeight();
 
 		dc.setColor(Graphics.COLOR_RED, Graphics.COLOR_TRANSPARENT);
-		dc.drawCircle(m_width/2*1.5, m_width/2*0.7, 7);
+		dc.drawCircle(m_width/2*1.5, m_height/2*0.65, 7);
 
 		if (m_bRecording) {
 			dc.setColor(Graphics.COLOR_RED, Graphics.COLOR_TRANSPARENT);
-			dc.fillCircle(m_width/2*1.5, m_width/2*0.7, 5);
+			dc.fillCircle(m_width/2*1.5, m_height/2*0.65, 5);
+			dc.drawText(m_width/2*1.5, (m_height/2*0.65)+7, Graphics.FONT_XTINY, "REC", Graphics.TEXT_JUSTIFY_CENTER);
 		}
 
     }
