@@ -97,7 +97,10 @@ _Include the project's license information._
 - xxx
 
 ## TODO
-- [] Scaling all graphics by screen-size
+- [] Cleaning code
+- [] Scaling graphics by screen-size: boat-size 
+- [] Scaling graphics by screen-size: clock-size and place
+- [] Scaling graphics by screen-size: speed-plot
         - 208: Forerunner 55
         - 218: fēnix 5S
         - 240: fēnix 5
@@ -107,9 +110,11 @@ _Include the project's license information._
         - 416: fēnix 8 43mm
         - 454: fēnix 8 47mm
 - [] Functions: Storing sail-data to FIT-File
+- [] Implement settings
 - [] Get wind-dir and wind-speed from ext wind-instrument
 - [] Computing target speed
 - [] Supporting Devices: enduro, fr965, fr955, fr945, fr945lte, fr265, fr265s
+- [x] Draw record indicator gray if REC has been turned on >1 min
 - [x] Display Record-indicator
 - [x] Supporting Devices: fenix5, fenix5plus, fenix5x, fenix5xplus, fenix6, fenix6pro, fenix6s, fenix6spro, fenix6xpro, fenix7, fenix7pro, 
 - [x] Functions: Set wind direction. The up and down buttons can be used for adjusting the wind direction with 5 degree increments.

@@ -25,6 +25,7 @@ class ShiftHappensUi {
     var m_bDrawOrthogonalCogPlot=false;
     var m_bDrawPolarCogPlot=true;
     var m_boatScale=1.2;
+	var _startRecordingTime = null;
 
     //=====================
     // Draws a red round record indicator
@@ -33,13 +34,27 @@ class ShiftHappensUi {
         m_width = dc.getWidth();
         m_height = dc.getHeight();
 
-		dc.setColor(Graphics.COLOR_RED, Graphics.COLOR_TRANSPARENT);
-		dc.drawCircle(m_width/2*1.5, m_height/2*0.65, 7);
+		var timediff;
+		if (_startRecordingTime != null) {
+			var now = new Time.Moment(Time.now().value());
+			timediff = now.value() - _startRecordingTime.value();
+		} else {
+			timediff = 0;
+		}
+		System.println("timediff: " + timediff);
+
+		// Draw a gray circle if recording has been going on for more than 60 seconds, red else
+		if (timediff > 60) {
+			dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_TRANSPARENT);
+		} else {
+			dc.setColor(Graphics.COLOR_RED, Graphics.COLOR_TRANSPARENT);
+		}
+
+		dc.drawCircle(m_width/2*1.5, m_height/2*0.75, 7);
 
 		if (m_bRecording) {
-			dc.setColor(Graphics.COLOR_RED, Graphics.COLOR_TRANSPARENT);
-			dc.fillCircle(m_width/2*1.5, m_height/2*0.65, 5);
-			dc.drawText(m_width/2*1.5, (m_height/2*0.65)+7, Graphics.FONT_XTINY, "REC", Graphics.TEXT_JUSTIFY_CENTER);
+			dc.fillCircle(m_width/2*1.5, m_height/2*0.75, 5);
+			dc.drawText(m_width/2*1.5, (m_height/2*0.75)+7, Graphics.FONT_XTINY, "REC", Graphics.TEXT_JUSTIFY_CENTER);
 		}
 
     }

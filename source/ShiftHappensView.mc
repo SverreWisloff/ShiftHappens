@@ -68,6 +68,7 @@ class ShiftHappensView extends WatchUi.View {
             // Start recording
             _ui.m_bRecording = true;
             app.startRecording();
+            _ui._startRecordingTime = new Time.Moment(Time.now().value());
         }
     }
 
