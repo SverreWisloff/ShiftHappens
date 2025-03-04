@@ -9,7 +9,7 @@ class ShiftHappensUi {
 	//Member variables
     var m_screenShape;
     var m_TackAngle = 90;
-    var m_posnInfo = null;
+    //var _posnInfo = null;
     var m_width;
     var m_height;
 	var m_bRecording = false;

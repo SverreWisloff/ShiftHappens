@@ -8,8 +8,8 @@ using Toybox.Activity as Activity;
 
 class ShiftHappensApp extends Application.AppBase {
     hidden var _shFit;
-    var m_ShiftHappensView;
-    var m_ShiftHappensDelegate;
+    var _ShiftHappensView;
+    var _ShiftHappensDelegate;
 
     function initialize() {
         AppBase.initialize();
@@ -40,7 +40,7 @@ class ShiftHappensApp extends Application.AppBase {
     }
 
     function update() {
-        m_ShiftHappensView.requestUpdate();
+        _ShiftHappensView.requestUpdate();
     }
 
 
@@ -48,7 +48,7 @@ class ShiftHappensApp extends Application.AppBase {
     function onPosition(info) {
         _shFit.recordData(info);
 
-        m_ShiftHappensView.setPosition(info);
+        _ShiftHappensView.setPosition(info);
 
         System.println("recordData");
     }
@@ -60,21 +60,21 @@ class ShiftHappensApp extends Application.AppBase {
         _shFit.onTimerSave();
 
     	// Save app-property - to next time 
-        m_ShiftHappensView.setProperties();
+        _ShiftHappensView.setProperties();
 
         System.println("onStop() - done for this time");
     }
 
     // Return the initial view of your application here
     function getInitialView() as [Views] or [Views, InputDelegates] {
-		m_ShiftHappensView = new ShiftHappensView();
-		m_ShiftHappensDelegate = new ShiftHappensDelegate();
-        m_ShiftHappensDelegate.setParentView(m_ShiftHappensView);
+		_ShiftHappensView = new ShiftHappensView();
+		_ShiftHappensDelegate = new ShiftHappensDelegate();
+        _ShiftHappensDelegate.setParentView(_ShiftHappensView);
 
 		// Read param from app-property
-        m_ShiftHappensView.getProperties();
+        _ShiftHappensView.getProperties();
 
-        return [ m_ShiftHappensView, m_ShiftHappensDelegate ];
+        return [ _ShiftHappensView, _ShiftHappensDelegate ];
         //return [ new ShiftHappensView(), new ShiftHappensDelegate() ];
     }
 
@@ -82,13 +82,13 @@ class ShiftHappensApp extends Application.AppBase {
     function setWinddirFromCloseHauled(starboard) {
         var NewWindDir;
         if (starboard){
-            NewWindDir = m_ShiftHappensView.getWindDir() - 45;
+            NewWindDir = _ShiftHappensView.getWindDir() - 45;
         } else {
-            NewWindDir = m_ShiftHappensView.getWindDir() + 45;
+            NewWindDir = _ShiftHappensView.getWindDir() + 45;
         }
         System.println("App.setWinddirFromCloseHauled() -  NewWindDir = " + NewWindDir );
 
-        m_ShiftHappensView.setWindDir(NewWindDir);
+        _ShiftHappensView.setWindDir(NewWindDir);
 
     }
 

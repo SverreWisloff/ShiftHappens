@@ -15,7 +15,7 @@ class ShiftHappensView extends WatchUi.View {
     var _ui = null;
 	var _SpeedHistory = new Dynamics(100,false);   // standard 120 (2 min)
 	var _CogHistory   = new Dynamics(100, true);   // standard 120 (2 min)  
-    var m_posnInfo = null;  
+    var _posnInfo = null;  
 //    var m_COG_deg = 0;
 //    var m_Speed_kn = 0;
 
@@ -99,13 +99,13 @@ class ShiftHappensView extends WatchUi.View {
         View.onUpdate(dc);
 
  		// Get COG & SOG from PositionInfo
-		if(m_posnInfo!=null	){ 
-			_ui.m_COG_deg = reduse_deg((m_posnInfo.heading)/Math.PI*180);
+		if(_posnInfo!=null	){ 
+			_ui.m_COG_deg = reduse_deg((_posnInfo.heading)/Math.PI*180);
 		} else {
 			_ui.m_COG_deg = 0;
 		}
-		if(m_posnInfo!=null){
-            _ui.m_Speed_kn = m_posnInfo.speed * 1.9438444924406;
+		if(_posnInfo!=null){
+            _ui.m_Speed_kn = _posnInfo.speed * 1.9438444924406;
 		} else {
 			_ui.m_Speed_kn = 0;
 		}
@@ -147,7 +147,7 @@ class ShiftHappensView extends WatchUi.View {
     }
 
     function setPosition(info) {
-        m_posnInfo = info;
+        _posnInfo = info;
 
 //        self.requestUpdate();
     }

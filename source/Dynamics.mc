@@ -23,17 +23,17 @@ function Quadrant( degree )
 
 class Dynamics 
 {
-	var m_Size = 10; // standard 120 (2 min)
-	var m_aData = [];
-	var m_aDataSmooth = [];
-	var m_nSmoothingWith = 2; // 0=off, 2=two points in both ways
-	var m_NowPointer; 
-	var m_PlotMaxData;
-	var m_PlotMinData;
-	var m_bCOG;
+	var _Size = 10; // standard 120 (2 min)
+	var _aData = [];
+	var _aDataSmooth = [];
+	var _nSmoothingWith = 2; // 0=off, 2=two points in both ways
+	var _NowPointer; 
+	var _PlotMaxData;
+	var _PlotMinData;
+	var _bCOG;
 
-	var m_PrevWatchX;
-	var m_PrevWatchY;
+	var _PrevWatchX;
+	var _PrevWatchY;
 
 //------------------------------------------------------
 // i     0    1    2    3    4    5    6    7    8    9
@@ -47,24 +47,24 @@ class Dynamics
 	// bCOG=true: 360 deg-data
 	function initialize(Size, bCOG) {
 		var i;
-		m_Size = Size;
-		m_bCOG = bCOG;
-		me.m_NowPointer = m_Size;
-		//System.println("Dynamics::initialize() - m_Size=" + m_Size );
-		for( i = 0; i < m_Size; i += 1 ) {
-			m_aData.add(999.00001);
-			m_aDataSmooth.add(999.00001);
+		_Size = Size;
+		_bCOG = bCOG;
+		me._NowPointer = _Size;
+		//System.println("Dynamics::initialize() - _Size=" + _Size );
+		for( i = 0; i < _Size; i += 1 ) {
+			_aData.add(999.00001);
+			_aDataSmooth.add(999.00001);
 		}
-		m_PlotMaxData=2.0;
-		m_PlotMinData=0.0;
+		_PlotMaxData=2.0;
+		_PlotMinData=0.0;
 		//me.Print();
 	}
 
 	// Make som demodata and fill the hole array with data from 1 to 3 
 	function fillDemData(){
-		for( var i = 0; i < m_Size+3; i += 1 ) {
+		for( var i = 0; i < _Size+3; i += 1 ) {
 			var demodata = Math.PI*2.0;
-			demodata = Math.sin( demodata * i / m_Size);
+			demodata = Math.sin( demodata * i / _Size);
 			demodata = demodata + 2;
 			me.push( demodata );
 		}	
@@ -73,17 +73,17 @@ class Dynamics
 	// Insert latest data
 	function push(newData)
 	{
-		//System.println("Dynamics::push(" + newData + ")  -- m_NowPointer=" + m_NowPointer);
+		//System.println("Dynamics::push(" + newData + ")  -- _NowPointer=" + _NowPointer);
 		
-		m_NowPointer+=1;
-		if (m_NowPointer>=m_Size){
-			m_NowPointer=0;
-//			System.println("Dynamics::push(" + newData + ")  -- m_NowPointer=" + m_NowPointer + " - Passing buffer-limit - new beginn at top");
+		_NowPointer+=1;
+		if (_NowPointer>=_Size){
+			_NowPointer=0;
+//			System.println("Dynamics::push(" + newData + ")  -- _NowPointer=" + _NowPointer + " - Passing buffer-limit - new beginn at top");
 		}
 
-		//System.println("Dynamics::push(" + newData + ")  -- m_NowPointer=" + m_NowPointer);
+		//System.println("Dynamics::push(" + newData + ")  -- _NowPointer=" + _NowPointer);
 
-		m_aData[m_NowPointer] = newData;
+		_aData[_NowPointer] = newData;
 
 	// Weighted moving average : Weights: 1-2-1
 	//Algorithm:
@@ -102,32 +102,32 @@ class Dynamics
 		var SmootedDataPrev2;
 
 		// Find Prev1Pnt
-		if (m_NowPointer==0){Prev1Pointer = m_Size-1;}
-		else {Prev1Pointer = m_NowPointer-1;}
+		if (_NowPointer==0){Prev1Pointer = _Size-1;}
+		else {Prev1Pointer = _NowPointer-1;}
 		
 		// Find Prev2Pnt
-		if (Prev1Pointer==0){Prev2Pointer = m_Size-1;}
+		if (Prev1Pointer==0){Prev2Pointer = _Size-1;}
 		else {Prev2Pointer = Prev1Pointer-1;}
 
 		// Find Prev3Pnt
-		if (Prev2Pointer==0){Prev3Pointer = m_Size-1;}
+		if (Prev2Pointer==0){Prev3Pointer = _Size-1;}
 		else {Prev3Pointer = Prev2Pointer-1;}
 
 		// Find Prev4Pnt
-		if (Prev3Pointer==0){Prev4Pointer = m_Size-1;}
+		if (Prev3Pointer==0){Prev4Pointer = _Size-1;}
 		else {Prev4Pointer = Prev3Pointer-1;}
 
-		DataPrev1 = m_aData[Prev1Pointer];
-		DataPrev2 = m_aData[Prev2Pointer];
-		DataPrev3 = m_aData[Prev3Pointer];
-		DataPrev4 = m_aData[Prev4Pointer];
+		DataPrev1 = _aData[Prev1Pointer];
+		DataPrev2 = _aData[Prev2Pointer];
+		DataPrev3 = _aData[Prev3Pointer];
+		DataPrev4 = _aData[Prev4Pointer];
 
 		if (DataPrev1>900){DataPrev1=newData;}
 		if (DataPrev2>900){DataPrev2=newData;}
 		if (DataPrev3>900){DataPrev3=newData;}
 		if (DataPrev4>900){DataPrev4=newData;}
 
-		if (m_bCOG)
+		if (_bCOG)
 		{
 			var Quad0 = Quadrant(newData);
 			var Quad1 = Quadrant(DataPrev1);
@@ -150,60 +150,60 @@ class Dynamics
 			}	
 		}
 		
-		if (m_nSmoothingWith==2){
+		if (_nSmoothingWith==2){
 			SmootedDataPrev2 = (DataPrev4*1.5 + DataPrev3*2.0 + DataPrev2*3.0 + DataPrev1*2.0 + newData*1.5) / 10.0;
 			SmootedDataPrev1 = (DataPrev2 + DataPrev1*2.0 + newData) / 4.0;
-			m_aDataSmooth [Prev2Pointer] = SmootedDataPrev2;
-			m_aDataSmooth [Prev1Pointer] = SmootedDataPrev1;
-			m_aDataSmooth [m_NowPointer] = newData;
-		} else if (m_nSmoothingWith==0){
-			m_aDataSmooth [m_NowPointer] = newData;
+			_aDataSmooth [Prev2Pointer] = SmootedDataPrev2;
+			_aDataSmooth [Prev1Pointer] = SmootedDataPrev1;
+			_aDataSmooth [_NowPointer] = newData;
+		} else if (_nSmoothingWith==0){
+			_aDataSmooth [_NowPointer] = newData;
 		}
 	}
 
 
 
 	function getData(sinceNow){
-		if (sinceNow>m_Size || sinceNow<0){return 0.0;}
+		if (sinceNow>_Size || sinceNow<0){return 0.0;}
 
-		var i = m_NowPointer-sinceNow;
+		var i = _NowPointer-sinceNow;
 
 		if (i<0){
-			i = m_Size + (i);
+			i = _Size + (i);
 		}
 
-		if (i>m_Size || i<0){return 0.0;}
+		if (i>_Size || i<0){return 0.0;}
 
-		return m_aData[i];
+		return _aData[i];
 	}
 	
 	function getSmoothedData(sinceNow){
-		if (sinceNow>m_Size || sinceNow<0){
+		if (sinceNow>_Size || sinceNow<0){
 			System.println("getSmoothedData() - SKAL IKKE SKJE");
 			return 0.0;
 		}
 
-		var i = m_NowPointer-sinceNow;
+		var i = _NowPointer-sinceNow;
 
 		if (i<0){
 //			System.println("getSmoothedData() - Passerer buffer");
-			i = m_Size + (i);
+			i = _Size + (i);
 		}
 
-		if (i>m_Size || i<0){
+		if (i>_Size || i<0){
 			System.println("getSmoothedData() - SKAL HELLER IKKE SKJE");
 			return 0.0;
 		}
 
-		return m_aDataSmooth[i];
+		return _aDataSmooth[i];
 	}
 
 	// Get smallest data-point
 	function Min()
 	{
 		var Minimum=99;
-		for( var i = 0; i < m_aData.size(); i += 1 ) {
-        	if (m_aData[i]<Minimum){Minimum=m_aData[i];}
+		for( var i = 0; i < _aData.size(); i += 1 ) {
+        	if (_aData[i]<Minimum){Minimum=_aData[i];}
         }
         return Minimum;
 	}
@@ -212,18 +212,18 @@ class Dynamics
 	function Max()
 	{
 		var Maximum=0;
-		for( var i = 0; i < m_aData.size(); i += 1 ) {
-        	if (m_aData[i]>Maximum && m_aData[i]<900){Maximum=m_aData[i];}
+		for( var i = 0; i < _aData.size(); i += 1 ) {
+        	if (_aData[i]>Maximum && _aData[i]<900){Maximum=_aData[i];}
         }
         return Maximum;
 	}
 
 	function Print()
 	{
-		System.println("Dynamics::Print() - m_NowPointer=" + me.m_NowPointer );
-		for( var i = 0; i < m_aData.size(); i += 1 ) {
-        	System.print("Dynamics[" + i + "]=" + m_aData[i] + " ");
-			if (i==me.m_NowPointer){
+		System.println("Dynamics::Print() - _NowPointer=" + me._NowPointer );
+		for( var i = 0; i < _aData.size(); i += 1 ) {
+        	System.print("Dynamics[" + i + "]=" + _aData[i] + " ");
+			if (i==me._NowPointer){
 				System.println("<-");
 			} else {
 				System.println(" ");
@@ -234,7 +234,7 @@ class Dynamics
 	function PrintReverse()
 	{
 		System.println("Dynamics::PrintReverse()" );
-		for( var sinceNow = 0; sinceNow < m_Size; sinceNow += 1 ) {
+		for( var sinceNow = 0; sinceNow < _Size; sinceNow += 1 ) {
         	var Data = getData(sinceNow);
 			System.println("sinceNow=" + sinceNow + " Data=" + Data);
         }
@@ -245,7 +245,7 @@ class Dynamics
 	function drawPolarPlot(dc, width, height, WindDirection)
 	{
 		//draw data
-		for( var sinceNow = 0; sinceNow < m_Size; sinceNow += 1 ) {
+		for( var sinceNow = 0; sinceNow < _Size; sinceNow += 1 ) {
         	var Data = getSmoothedData(sinceNow);
 			if (Data<900 )//&& Data>0.0 && Data<360.0)
 			{
@@ -260,25 +260,25 @@ class Dynamics
 	{
 		// X,Y refers to origo i face-centre
 		var i = -(WindDirection+90-Data)/180.0 * Math.PI;
-        var X = ((width  / 2)-5) * ((m_Size.toFloat()-sinceNow)/m_Size) * Math.cos(i);
-        var Y = ((height / 2)-5) * ((m_Size.toFloat()-sinceNow)/m_Size) * Math.sin(i);
+        var X = ((width  / 2)-5) * ((_Size.toFloat()-sinceNow)/_Size) * Math.cos(i);
+        var Y = ((height / 2)-5) * ((_Size.toFloat()-sinceNow)/_Size) * Math.sin(i);
 		var WatchX = X + (width / 2);
 		var WatchY = Y + (height / 2);
 
-		if (m_PrevWatchX==null){
-			m_PrevWatchX = WatchX;
-			m_PrevWatchY = WatchY;
+		if (_PrevWatchX==null){
+			_PrevWatchX = WatchX;
+			_PrevWatchY = WatchY;
 		}
 		if (sinceNow==0){
-			m_PrevWatchX = WatchX;
-			m_PrevWatchY = WatchY;
-		} else if (sinceNow<m_Size-1){
-			dc.drawLine(m_PrevWatchX, m_PrevWatchY, WatchX, WatchY);
+			_PrevWatchX = WatchX;
+			_PrevWatchY = WatchY;
+		} else if (sinceNow<_Size-1){
+			dc.drawLine(_PrevWatchX, _PrevWatchY, WatchX, WatchY);
 //    	dc.fillCircle(X + (width/2), Y + (height/2), 2);
 		}
 
-		m_PrevWatchX = WatchX;
-		m_PrevWatchY = WatchY;
+		_PrevWatchX = WatchX;
+		_PrevWatchY = WatchY;
 	}
 
 	//Draw smoothed data as a line in a trad. orthogonal diagram
@@ -295,55 +295,55 @@ class Dynamics
 		var dataMin = me.Min();
 		var dataMax = me.Max();
 
-		if (m_PlotMinData < dataMin  ){
-			m_PlotMinData = m_PlotMinData + 0.05;
+		if (_PlotMinData < dataMin  ){
+			_PlotMinData = _PlotMinData + 0.05;
 		} else {
-			m_PlotMinData = dataMin; 
+			_PlotMinData = dataMin; 
 		}
 
-		if ( (m_PlotMaxData > dataMax)  ){
-			m_PlotMaxData = m_PlotMaxData - 0.05;
+		if ( (_PlotMaxData > dataMax)  ){
+			_PlotMaxData = _PlotMaxData - 0.05;
 		} else {
-			m_PlotMaxData = dataMax;
+			_PlotMaxData = dataMax;
 		}
 
 		//Draw a help line to nearest long
-		var DisplayAbsicce = (m_PlotMaxData + m_PlotMinData ) / 2.0;
+		var DisplayAbsicce = (_PlotMaxData + _PlotMinData ) / 2.0;
 		DisplayAbsicce = DisplayAbsicce.toLong();
 		dc.setColor(Graphics.COLOR_DK_GREEN, Graphics.COLOR_TRANSPARENT);
 		dc.setPenWidth(1);
-		plotCoordToWatchCoord(dc, DX, DY, width, height, m_PlotMaxData, m_PlotMinData, DisplayAbsicce, 0);
-		plotCoordToWatchCoord(dc, DX, DY, width, height, m_PlotMaxData, m_PlotMinData, DisplayAbsicce, m_Size-2);
+		plotCoordToWatchCoord(dc, DX, DY, width, height, _PlotMaxData, _PlotMinData, DisplayAbsicce, 0);
+		plotCoordToWatchCoord(dc, DX, DY, width, height, _PlotMaxData, _PlotMinData, DisplayAbsicce, _Size-2);
 		
-		if (DisplayAbsicce+1 < m_PlotMaxData){
-			plotCoordToWatchCoord(dc, DX, DY, width, height, m_PlotMaxData, m_PlotMinData, DisplayAbsicce+1, 0);
-			plotCoordToWatchCoord(dc, DX, DY, width, height, m_PlotMaxData, m_PlotMinData, DisplayAbsicce+1, m_Size-2);
+		if (DisplayAbsicce+1 < _PlotMaxData){
+			plotCoordToWatchCoord(dc, DX, DY, width, height, _PlotMaxData, _PlotMinData, DisplayAbsicce+1, 0);
+			plotCoordToWatchCoord(dc, DX, DY, width, height, _PlotMaxData, _PlotMinData, DisplayAbsicce+1, _Size-2);
 		}
-		if (DisplayAbsicce-1 > m_PlotMinData){
-			plotCoordToWatchCoord(dc, DX, DY, width, height, m_PlotMaxData, m_PlotMinData, DisplayAbsicce-1, 0);
-			plotCoordToWatchCoord(dc, DX, DY, width, height, m_PlotMaxData, m_PlotMinData, DisplayAbsicce-1, m_Size-2);
+		if (DisplayAbsicce-1 > _PlotMinData){
+			plotCoordToWatchCoord(dc, DX, DY, width, height, _PlotMaxData, _PlotMinData, DisplayAbsicce-1, 0);
+			plotCoordToWatchCoord(dc, DX, DY, width, height, _PlotMaxData, _PlotMinData, DisplayAbsicce-1, _Size-2);
 		}
 
-//		System.println("dataMax="+ dataMax + " dataMin="+ dataMin + " m_PlotMaxData=" + m_PlotMaxData + " DisplayAbsicce=" + DisplayAbsicce);
+//		System.println("dataMax="+ dataMax + " dataMin="+ dataMin + " _PlotMaxData=" + _PlotMaxData + " DisplayAbsicce=" + DisplayAbsicce);
 		
 		//draw data-points into plot
 		var sinceNow;
 		var Data;
 		dc.setPenWidth(7);
 		dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_TRANSPARENT);
-		for( sinceNow = 0; sinceNow < m_Size-1; sinceNow += 1 ) {
+		for( sinceNow = 0; sinceNow < _Size-1; sinceNow += 1 ) {
         	Data = getSmoothedData(sinceNow);
 			if (Data<900){
-				plotCoordToWatchCoord(dc, DX, DY, width, height, m_PlotMaxData, m_PlotMinData, Data, sinceNow);
+				plotCoordToWatchCoord(dc, DX, DY, width, height, _PlotMaxData, _PlotMinData, Data, sinceNow);
 			}
 		}
 		dc.setPenWidth(3);
 		dc.setColor(Graphics.COLOR_GREEN, Graphics.COLOR_TRANSPARENT);
 
-		for( sinceNow = 0; sinceNow < m_Size; sinceNow += 1 ) {
+		for( sinceNow = 0; sinceNow < _Size; sinceNow += 1 ) {
        	   	Data = getSmoothedData(sinceNow);
 			if (Data<900){
-				plotCoordToWatchCoord(dc, DX, DY, width, height, m_PlotMaxData, m_PlotMinData, Data, sinceNow);
+				plotCoordToWatchCoord(dc, DX, DY, width, height, _PlotMaxData, _PlotMinData, Data, sinceNow);
 			}
 		}
 //		me.Print();
@@ -365,25 +365,25 @@ class Dynamics
 			//!!!!
 			return;
 		} else {
-			WatchX = DX + width - ((time.toFloat()/m_Size.toFloat())*width.toFloat());
+			WatchX = DX + width - ((time.toFloat()/_Size.toFloat())*width.toFloat());
 			WatchY = DY + height * ((dataMax.toFloat()-data)/(dataMax.toFloat()-dataMin));
 		}
-//        System.println("DX="+DX+ " DY="+DY+" width="+width+ " height="+height+ " dataMax="+dataMax+" dataMin="+dataMin+ " data="+data+ " time="+time + " m_Size=" + m_Size);
+//        System.println("DX="+DX+ " DY="+DY+" width="+width+ " height="+height+ " dataMax="+dataMax+" dataMin="+dataMin+ " data="+data+ " time="+time + " _Size=" + _Size);
 
-		if (m_PrevWatchX==null){
-			m_PrevWatchX = WatchX;
-			m_PrevWatchY = WatchY;
+		if (_PrevWatchX==null){
+			_PrevWatchX = WatchX;
+			_PrevWatchY = WatchY;
 		}
 		//Nulstiller forrige koordinat ved første punkt
 		if (time==0){
-			m_PrevWatchX = WatchX;
-			m_PrevWatchY = WatchY;
-		} else if (time<m_Size-1){
-			dc.drawLine(m_PrevWatchX, m_PrevWatchY, WatchX, WatchY);
+			_PrevWatchX = WatchX;
+			_PrevWatchY = WatchY;
+		} else if (time<_Size-1){
+			dc.drawLine(_PrevWatchX, _PrevWatchY, WatchX, WatchY);
 		}
 
-		m_PrevWatchX = WatchX;
-		m_PrevWatchY = WatchY;
+		_PrevWatchX = WatchX;
+		_PrevWatchY = WatchY;
 	}
 
 }	
