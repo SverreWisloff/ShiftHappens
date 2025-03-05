@@ -72,25 +72,27 @@ class ShiftHappensView extends WatchUi.View {
         }
     }
 
+    function setWindDirDiff(diffAngle) as Void {
+        setWindDir(_ui.m_WindDirection + diffAngle);
+    }
     function setWindDir(WindDir) as Void {
-        System.println("View.setWindDir( " + WindDir + " ) " );
         _ui.m_WindDirection = WindDir;
-        updateWindDirDiff(0);        
+        updateWindDir();        
+        System.println("View.setWindDir( " + WindDir + " ) " );
     }
     function getWindDir()  {
         return _ui.m_WindDirection;
     }
+    function getCOG_deg()  {
+        return _ui.m_COG_deg;
+    }
 
-    function updateWindDirDiff(diffAngle) as Void {
-        // Update Wind-dir
-        _ui.m_WindDirection += diffAngle;
-//        _ui.m_WindDirection = Application.Storage.getValue("WindDirection");
+    function updateWindDir() as Void {
         _ui.m_WindDirection = Math.round(_ui.m_WindDirection);
         _ui.m_WindDirection = reduse_deg(_ui.m_WindDirection.toLong());
         _ui.m_WindDirStarboard = reduse_deg(_ui.m_WindDirection + (_ui.m_TackAngle/2) );
         _ui.m_WindDirPort = reduse_deg(_ui.m_WindDirection - (_ui.m_TackAngle/2) );
-        System.println("View.updateWindDirDiff( " + diffAngle + " )");
-        System.println("     m_WindDirection = " + _ui.m_WindDirection);
+        System.println("View.updateWindDir:: Stbrd=" + _ui.m_WindDirStarboard + " WindDir=" + _ui.m_WindDirection + " Port=" + _ui.m_WindDirPort );
     }
 
     // Update the view

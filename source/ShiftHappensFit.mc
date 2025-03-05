@@ -27,7 +27,7 @@ class ShiftHappensFit {
 
         if(_TimerRunning) {
        		//TODO Record databto buffer
-            System.println("recordData");
+            //System.println("recordData");
     	}
     }
     

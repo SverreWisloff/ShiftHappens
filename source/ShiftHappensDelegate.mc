@@ -28,12 +28,12 @@ class ShiftHappensDelegate extends WatchUi.BehaviorDelegate {
         }
         else if (keyEvent.getKey()==KEY_UP){
 	        //Press UP to increase WindDirection with 5 degrees
-            _parentView.updateWindDirDiff(-5);
+            _parentView.setWindDirDiff(-5);
             System.println("KEY_UP");
         }
         else if (keyEvent.getKey()==KEY_DOWN){
 	        //Press DOWN to decrease WindDirection with 5 degrees
-            _parentView.updateWindDirDiff(5);
+            _parentView.setWindDirDiff(5);
             System.println("KEY_DOWN");
         }
         else if (keyEvent.getKey()==KEY_ESC){

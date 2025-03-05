@@ -97,6 +97,7 @@ _Include the project's license information._
 - xxx
 
 ## TODO
+- [] set version to 2.0, and upload to garmin connect store
 - [] Cleaning code
 - [] Scaling graphics by screen-size: boat-size 
 - [] Scaling graphics by screen-size: clock-size and place

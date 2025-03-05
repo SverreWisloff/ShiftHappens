@@ -50,7 +50,7 @@ class ShiftHappensApp extends Application.AppBase {
 
         _ShiftHappensView.setPosition(info);
 
-        System.println("recordData");
+        //System.println("recordData");
     }
 
     // onStop() is called when your application is exiting
@@ -82,9 +82,9 @@ class ShiftHappensApp extends Application.AppBase {
     function setWinddirFromCloseHauled(starboard) {
         var NewWindDir;
         if (starboard){
-            NewWindDir = _ShiftHappensView.getWindDir() - 45;
+            NewWindDir = _ShiftHappensView.getCOG_deg() - 45;
         } else {
-            NewWindDir = _ShiftHappensView.getWindDir() + 45;
+            NewWindDir = _ShiftHappensView.getCOG_deg() + 45;
         }
         System.println("App.setWinddirFromCloseHauled() -  NewWindDir = " + NewWindDir );
 

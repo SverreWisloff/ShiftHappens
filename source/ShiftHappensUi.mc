@@ -41,7 +41,7 @@ class ShiftHappensUi {
 		} else {
 			timediff = 0;
 		}
-		System.println("timediff: " + timediff);
+		//System.println("timediff: " + timediff);
 
 		// Draw a gray circle if recording has been going on for more than 60 seconds, red else
 		if (timediff > 60) {
