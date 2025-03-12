@@ -122,6 +122,8 @@ class ShiftHappensView extends WatchUi.View {
 
         // Draw the tick marks around the edges of the screen
         _ui.drawHashMarks(dc);
+        // Draw the wind arrow
+        _ui.drawWindArrow(dc);
         // Draws a red round record indicator
         _ui.drawRecordIndicator(dc);      
         // Draw North arrow

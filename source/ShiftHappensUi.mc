@@ -144,6 +144,57 @@ class ShiftHappensUi {
     	dc.fillCircle(X + (m_width/2), Y + (m_height/2), m_CogDotSize);
     }	
     //=====================
+    // Draws  Wind-arrow
+    //=====================
+    function drawWindArrow(dc) {
+		//  -----------------> x
+		//  |    10
+		//  |   ---
+		//  |   | | 10
+		//  |  -- --
+		//  |  \   / 10
+		//  |   \ /
+		//  y    V
+		var arrayArrow = [ 
+				[+  0,   0], 
+				[+  5,+  0], 
+				[+  5,+ 10], 
+				[+ 10,+ 10], 
+				[+  0,+ 20], 
+				[- 10,+ 10], 
+				[-  5,+ 10], 
+				[-  5,+  0], 
+				[+  0,+  0] 
+			];
+		// Scaling the size of the arrow
+		var arrowScale=m_width/200.0; // TODO scale the arrow by watch size
+		for (var i=0; i<arrayArrow.size(); i+=1){
+			arrayArrow[i][0] = arrayArrow[i][0] * arrowScale;
+			arrayArrow[i][1] = arrayArrow[i][1] * arrowScale;
+		}
+		// Move/translate the arrow
+		var dX=m_width/2;
+		var dY=40;//m_height*0.20;
+		for (var i=0; i<arrayArrow.size(); i+=1){
+			arrayArrow[i][0] = arrayArrow[i][0] + dX;
+			arrayArrow[i][1] = arrayArrow[i][1] + dY;
+		}
+		// Draw the arrow
+		var nextX, nextY, prevX, prevY;
+		dc.setColor(Graphics.COLOR_BLUE, Graphics.COLOR_TRANSPARENT);
+		dc.setPenWidth(2);
+		prevX = arrayArrow[0][0];
+		prevY = arrayArrow[0][1];
+		for (var i=1; i<arrayArrow.size(); i+=1){
+			nextX = arrayArrow[i][0];
+			nextY = arrayArrow[i][1];
+			dc.drawLine( prevX, prevY, nextX, nextY);
+			prevX=nextX;
+			prevY=nextY;
+		}
+	}
+
+    //=====================
     // Draws  Boat
     //=====================
     function drawBoat(dc) {
@@ -220,9 +271,11 @@ class ShiftHappensUi {
 		// Draw numbers for wind directions
         dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_BLACK);
 		//m_WindDirection = me.reduse_deg(m_WindDirection); // !!! Why?
-        dc.drawText(m_width/2, m_height/2-115, Graphics.FONT_TINY, m_WindDirection , Graphics.TEXT_JUSTIFY_CENTER);
-        dc.drawText(m_width/5, m_height/2-70, Graphics.FONT_TINY, m_WindDirPort, Graphics.TEXT_JUSTIFY_LEFT);
-        dc.drawText(m_width/5*4, m_height/2-70, Graphics.FONT_TINY, m_WindDirStarboard, Graphics.TEXT_JUSTIFY_RIGHT);
+        dc.drawText(m_width/2, 5, Graphics.FONT_TINY, m_WindDirection , Graphics.TEXT_JUSTIFY_CENTER);
+
+		var cos45 = Math.cos(Math.PI/4);
+        dc.drawText(m_width/2-m_width/2*cos45+15, m_height/2-m_height/2*cos45, Graphics.FONT_TINY, m_WindDirPort, Graphics.TEXT_JUSTIFY_LEFT);
+		dc.drawText(m_width/2+m_width/2*cos45-15, m_height/2-m_height/2*cos45, Graphics.FONT_TINY, m_WindDirStarboard, Graphics.TEXT_JUSTIFY_RIGHT);
     }
 
 

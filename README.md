@@ -115,6 +115,7 @@ _Include the project's license information._
 - [] Get wind-dir and wind-speed from ext wind-instrument
 - [] Computing target speed
 - [] Supporting Devices: enduro, fr965, fr955, fr945, fr945lte, fr265, fr265s
+- [x] Draw wind-arrow
 - [x] Draw record indicator gray if REC has been turned on >1 min
 - [x] Display Record-indicator
 - [x] Supporting Devices: fenix5, fenix5plus, fenix5x, fenix5xplus, fenix6, fenix6pro, fenix6s, fenix6spro, fenix6xpro, fenix7, fenix7pro, 
