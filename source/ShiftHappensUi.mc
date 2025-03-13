@@ -194,23 +194,8 @@ class ShiftHappensUi {
 		}
 	}
 
-    //=====================
-    // Draws  Boat
-    //=====================
-    function drawBoat(dc) {
-    
-    	if (!m_bDrawBoat){
-	    	return;
-		}
+    function computeBoatPolygon(boatScale)  {
 		
-		// X,Y refers to origo i face-centre
-		var WD = -(m_WindDirection+90-m_COG_deg)/180.0 * Math.PI;
-		WD = WD + Math.PI/2;
-		
-    	//Draw Boat
-    	dc.setPenWidth(5);
-    	dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_TRANSPARENT);
-
 		var arrayBoat = [ 
 				[+  0,- 50], 
 				[+  6,- 40], 
@@ -235,12 +220,32 @@ class ShiftHappensUi {
 			];
 
 		//Scaling the size of the boat
-		m_boatScale=1.2;
 		for (var i=0; i<arrayBoat.size(); i+=1){
-			arrayBoat[i][0] = arrayBoat[i][0] * m_boatScale;
-			arrayBoat[i][1] = arrayBoat[i][1] * m_boatScale;
+			arrayBoat[i][0] = arrayBoat[i][0] * boatScale;
+			arrayBoat[i][1] = arrayBoat[i][1] * boatScale;
+		}
+		return arrayBoat;
+	}
+
+    //=====================
+    // Draws  Boat
+    //=====================
+    function drawBoat(dc) {
+    
+    	if (!m_bDrawBoat){
+	    	return;
 		}
 		
+		// X,Y refers to origo i face-centre
+		var WD = -(m_WindDirection+90-m_COG_deg)/180.0 * Math.PI;
+		WD = WD + Math.PI/2;
+		
+    	//Draw Boat
+    	dc.setPenWidth(5);
+    	dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_TRANSPARENT);
+
+		var arrayBoat = computeBoatPolygon(m_boatScale);
+
 		var X = arrayBoat[0][0];
 		var Y = arrayBoat[0][1];
 		var COS = Math.cos(WD);
