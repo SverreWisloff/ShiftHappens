@@ -9,7 +9,6 @@ class ShiftHappensUi {
 	//Member variables
     var m_screenShape;
     var m_TackAngle = 90;
-    //var _posnInfo = null;
     var m_width;
     var m_height;
 	var m_bRecording = false;
@@ -98,7 +97,7 @@ class ShiftHappensUi {
     //=====================
     // Draws North 
     //=====================
-    function drawNorth(dc) {
+    function drawNorth(dc as Dc) {
     	if (m_bDrawNWSE==false){
     		return;
     	}
@@ -130,7 +129,7 @@ class ShiftHappensUi {
     //=====================
     // Draws COG-dot 
     //=====================
-    function drawCogDot(dc) {
+    function drawCogDot(dc as Dc) {
 		// X,Y refers to origo i face-centre
 		var i = -(m_WindDirection+90-m_COG_deg)/180.0 * Math.PI;
         var X = ((m_width/2)-m_CogDotSize) * Math.cos(i);
@@ -146,7 +145,7 @@ class ShiftHappensUi {
     //=====================
     // Draws  Wind-arrow
     //=====================
-    function drawWindArrow(dc) {
+    function drawWindArrow(dc as Dc) {
 		//  -----------------> x
 		//  |    10
 		//  |   ---
@@ -167,14 +166,14 @@ class ShiftHappensUi {
 				[+  0,+  0] 
 			];
 		// Scaling the size of the arrow
-		var arrowScale=m_width/200.0; // TODO scale the arrow by watch size
+		var arrowScale = m_width/200.0;
 		for (var i=0; i<arrayArrow.size(); i+=1){
 			arrayArrow[i][0] = arrayArrow[i][0] * arrowScale;
 			arrayArrow[i][1] = arrayArrow[i][1] * arrowScale;
 		}
 		// Move/translate the arrow
 		var dX=m_width/2;
-		var dY=40;//m_height*0.20;
+		var dY=40;
 		for (var i=0; i<arrayArrow.size(); i+=1){
 			arrayArrow[i][0] = arrayArrow[i][0] + dX;
 			arrayArrow[i][1] = arrayArrow[i][1] + dY;
@@ -230,7 +229,7 @@ class ShiftHappensUi {
     //=====================
     // Draws  Boat
     //=====================
-    function drawBoat(dc) {
+    function drawBoat(dc as Dc) {
     
     	if (!m_bDrawBoat){
 	    	return;
@@ -251,9 +250,9 @@ class ShiftHappensUi {
 		var COS = Math.cos(WD);
 		var SIN = Math.sin(WD); 
 
-		moveToOrigoC( dc, (X*COS) - (Y*SIN), (X*SIN) + (Y*COS) );    	
-		
-		for( var i = 1; i < 20; i += 1 ) {
+		moveToOrigoC( dc, (X*COS) - (Y*SIN), (X*SIN) + (Y*COS) );  
+	
+		for( var i = 1; i < arrayBoat.size(); i += 1 ) {
 			X = arrayBoat[i][0];
 			Y = arrayBoat[i][1];
 			lineToOrigoC( dc, (X*COS) - (Y*SIN), (X*SIN) + (Y*COS) );
@@ -264,7 +263,7 @@ class ShiftHappensUi {
     //================================
     //Draw laylines
     //================================
-    function drawLaylines(dc){
+    function drawLaylines(dc as Dc){
 		// Draw laylines
 		dc.setColor(Graphics.COLOR_BLUE, Graphics.COLOR_BLACK);
 		dc.setPenWidth(2);
@@ -332,7 +331,7 @@ class ShiftHappensUi {
 	// ==========================================
     // Draw COG-text in a circle
 	// ==========================================
-	function drawCOGtext(dc){
+	function drawCOGtext(dc as Dc){
 		var fontHeight = dc.getFontHeight(Graphics.FONT_TINY); 
 		dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_BLACK);
 		dc.fillCircle(m_width/2, m_height/2, 25);
@@ -346,7 +345,7 @@ class ShiftHappensUi {
 	// ==========================================
     // Draw Time-text
 	// ==========================================
-    function drawTimeText(dc){
+    function drawTimeText(dc as Dc) {
         var myTime = System.getClockTime(); // ClockTime object
         var myTimeText = myTime.hour.format("%02d") + ":" + myTime.min.format("%02d") + ":" + myTime.sec.format("%02d");
         dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
