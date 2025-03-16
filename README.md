@@ -1,4 +1,4 @@
-# Shift Happens
+# Wind Shift Happens
 
 This is a further development of the [TackingMaster](https://github.com/SverreWisloff/TackingMaster) project. This new version will save activity to FIT file.
 
@@ -96,10 +96,10 @@ _Include the project's license information._
 - xxx
 
 ## TODO
-- [] set version to 2.0, and upload to garmin connect store
-- [] Cleaning code
-- [] Scaling graphics by screen-size: clock-size and place
-- [] Scaling graphics by screen-size: speed-plot
+- [ ] set version to 2.0, and upload to garmin connect store
+- [ ] Cleaning code
+- [ ] Scaling graphics by screen-size: clock-size and place
+- [ ] Scaling graphics by screen-size: speed-plot
         - 208: Forerunner 55
         - 218: fēnix 5S
         - 240: fēnix 5
@@ -108,11 +108,11 @@ _Include the project's license information._
         - 390: Forerunner® 165
         - 416: fēnix 8 43mm
         - 454: fēnix 8 47mm
-- [] Functions: Storing sail-data to FIT-File
-- [] Implement settings in menu
-- [] Get wind-dir and wind-speed from ext wind-instrument
-- [] Computing target speed
-- [] Supporting Devices: enduro, fr965, fr955, fr945, fr945lte, fr265, fr265s
+- [ ] Functions: Storing sail-data to FIT-File
+- [ ] Implement settings in menu
+- [ ] Get wind-dir and wind-speed from ext wind-instrument
+- [ ] Computing target speed
+- [ ] Supporting Devices: enduro, fr965, fr955, fr945, fr945lte, fr265, fr265s
 - [x] Scaling graphics by screen-size: boat-size 
 - [x] Draw wind-arrow
 - [x] Draw record indicator gray if REC has been turned on >1 min
