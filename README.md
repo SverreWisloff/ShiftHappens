@@ -10,7 +10,7 @@ This is a further development of the Tacking Assist App. This new version will s
 
 ## Installation
 
-The app can be installed by the Garmin Connect Store. LINK-TODO
+The app can be installed by the Garmin Connect Store. [Download](https://apps.garmin.com/apps/0fb91bfc-d3b1-4e1b-a8e0-c005b9bf4ea1)
 
 ## Usage
 
@@ -84,16 +84,15 @@ _Include the project's license information._
 
 ## Versions
 
-2.0
+1.0
 - copy code from TacingAssist
 - Save activity to FIT file
 - Settings from the Connect app
-- Support for fenix 6 and 7 watches. 
+- Support for fenix 5, 6, 7, and Marq.
 
 ## Notes to self while coding
 - [SunEclipticAnalog](https://github.com/SverreWisloff/SunEclipticAnalog?tab=readme-ov-file#notes-to-self-while-coding)
 - [SunFacing](https://github.com/SverreWisloff/SunFacing?tab=readme-ov-file#notes-to-self-while-coding)
-- xxx
 
 ## TODO
 - [ ] set version to 2.0, and upload to garmin connect store
