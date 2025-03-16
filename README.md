@@ -1,34 +1,33 @@
 # Shift Happens
 
-_A brief description of what this project does and who it's for._
-
-This is a further development of the [TackingMaster](https://github.com/SverreWisloff/TackingMaster) project. This new version will save activity to FIT file, allow settings from the Connect app, and support for newer watches.
-
-Perhaps the app will also be expanded with a better filter, animations, saving key sailing-metrics to a FIT file, calculate target speed, and integrate with a wind instrument in the future?
+This is a further development of the [TackingMaster](https://github.com/SverreWisloff/TackingMaster) project. This new version will save activity to FIT file.
 
 ## Purpose
 
-This is a simple app for Garmin watches that provides useful information for sailboats that do not have wind instruments. Set wind direction and read close-hauled direction, course over ground and speed. Observe wind-shifts and speed-changes, and see the consequences and make good decisions.
+This is a sailing app for Garmin watches that provides useful information for sailboats that do not have wind instruments. Set wind direction and read close-hauled direction, course over ground and speed. Observe wind-shifts and speed-changes, and see the consequences and make good decisions.
+
+This is a further development of the Tacking Assist App. This new version will save activity to FIT file, allow settings from the Connect app, and support for newer watches.
 
 ## Installation
-
-_Instructions on how to install and set up the project._
 
 The app can be installed by the Garmin Connect Store. LINK-TODO
 
 ## Usage
 
+Screenshot
+![screehot](https://github.com/SverreWisloff/ShiftHappens/blob/main/screenshot/Hero.jpg?raw=true)
+
 ### Screen display:
-- Speed. The green number is speed. 
-- Speed changes. Plot is displayed for historical speed changes.
-- Course over ground. In the center circle, course/heading over ground is displayed in yellow. The yellow dot, and gray boat show your course over ground direction. 
-- Course over ground changes. Plot is displayed for historical course-shifts, also in yellow.
-- Wind direction, white number at the top
-- Red filled dot indicate recoring av activity is on
+- Speed: The green number is speed. 
+- Speed changes: Plot is displayed for historical speed changes.
+- Course over ground: In the center circle, course/heading over ground is displayed in yellow. The yellow dot, and gray boat show your course over ground direction. 
+- Course over ground changes: Plot is displayed for historical course-shifts, also in yellow.
+- Wind direction: white number at the top
+- Red filled dot indicate recording an activity is on
 - Close-hauled direction
 
 ### Buttons:
-- **Up**: wind direction adjusting by 5 deg
+- **Up**: wind direction adjusting by -5 deg
 - **Down**: wind direction adjusting by 5 deg
 - **Menu** (hold up): define wind direction by either port, or starboard close-hauled direction
 - **Start/stop**: start and stop recording to activity-session (FIT)
@@ -85,7 +84,7 @@ _Include the project's license information._
 
 ## Versions
 
-1.0
+2.0
 - copy code from TacingAssist
 - Save activity to FIT file
 - Settings from the Connect app
@@ -99,7 +98,6 @@ _Include the project's license information._
 ## TODO
 - [] set version to 2.0, and upload to garmin connect store
 - [] Cleaning code
-- [] Scaling graphics by screen-size: boat-size 
 - [] Scaling graphics by screen-size: clock-size and place
 - [] Scaling graphics by screen-size: speed-plot
         - 208: Forerunner 55
@@ -111,10 +109,11 @@ _Include the project's license information._
         - 416: fēnix 8 43mm
         - 454: fēnix 8 47mm
 - [] Functions: Storing sail-data to FIT-File
-- [] Implement settings
+- [] Implement settings in menu
 - [] Get wind-dir and wind-speed from ext wind-instrument
 - [] Computing target speed
 - [] Supporting Devices: enduro, fr965, fr955, fr945, fr945lte, fr265, fr265s
+- [x] Scaling graphics by screen-size: boat-size 
 - [x] Draw wind-arrow
 - [x] Draw record indicator gray if REC has been turned on >1 min
 - [x] Display Record-indicator
