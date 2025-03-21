@@ -85,9 +85,14 @@ class Dynamics
 
 		_aData[_NowPointer] = newData;
 
+		smoothingWeightedMovingAverage();
+
+	}
+
+	function smoothingWeightedMovingAverage(){
 	// Weighted moving average : Weights: 1-2-1
 	//Algorithm:
-	// Smoothed(prev2) = (prev4 + prev3*2 + prev2*3 + prev1*2 + this) / 4
+	// Smoothed(prev2) = (prev4*1,5 + prev3*2 + prev2*3 + prev1*2 + this*1,5) / 10
 	// Smoothed(prev1) = (prev2 + prev1*2 + this) / 4
 	// Smoothed(this) = This
 		var Prev1Pointer;
@@ -100,6 +105,8 @@ class Dynamics
 		var DataPrev4;
 		var SmootedDataPrev1;
 		var SmootedDataPrev2;
+
+		var newData = _aData[_NowPointer];
 
 		// Find Prev1Pnt
 		if (_NowPointer==0){Prev1Pointer = _Size-1;}
@@ -160,8 +167,6 @@ class Dynamics
 			_aDataSmooth [_NowPointer] = newData;
 		}
 	}
-
-
 
 	function getData(sinceNow){
 		if (sinceNow>_Size || sinceNow<0){return 0.0;}
