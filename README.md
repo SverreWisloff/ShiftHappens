@@ -14,8 +14,7 @@ The app can be installed by the Garmin Connect Store. [Download](https://apps.ga
 
 ## Usage
 
-Screenshot
-![screehot](https://github.com/SverreWisloff/ShiftHappens/blob/main/screenshot/Hero.jpg?raw=true)
+![Screenshot](https://github.com/SverreWisloff/ShiftHappens/blob/main/screenshot/Hero.jpg?raw=true)
 
 ### Screen display:
 - Speed: The green number is speed. 
@@ -33,7 +32,26 @@ Screenshot
 - **Start/stop**: start and stop recording to activity-session (FIT)
 - **Back/lap**: Stop recording and exit app
 
-### Ideas:
+## License
+
+_Include the project's license information._
+
+## Versions
+
+Dev
+- Bug fix
+
+1.0
+- copy code from TacingAssist
+- Save activity to FIT file
+- Settings from the Connect app
+- Support for fenix 5, 6, 7, and Marq.
+
+# Notes to self while coding
+- [SunEclipticAnalog](https://github.com/SverreWisloff/SunEclipticAnalog?tab=readme-ov-file#notes-to-self-while-coding)
+- [SunFacing](https://github.com/SverreWisloff/SunFacing?tab=readme-ov-file#notes-to-self-while-coding)
+
+## Ideas:
 - Storing sail-data to FIT-File (AWS, AWA)
 - Get wind-dir and wind-speed from ext wind-instrument
 - Computing target speed
@@ -77,24 +95,13 @@ Screenshot
 | + draw...(dc)    |
 +------------------+
 ````
+## Kalanfilter
 
-## License
+### Resources
+-[William Franklin](https://thekalmanfilter.com/)
+-
 
-_Include the project's license information._
-
-## Versions
-
-1.0
-- copy code from TacingAssist
-- Save activity to FIT file
-- Settings from the Connect app
-- Support for fenix 5, 6, 7, and Marq.
-
-## Notes to self while coding
-- [SunEclipticAnalog](https://github.com/SverreWisloff/SunEclipticAnalog?tab=readme-ov-file#notes-to-self-while-coding)
-- [SunFacing](https://github.com/SverreWisloff/SunFacing?tab=readme-ov-file#notes-to-self-while-coding)
-
-## TODO
+# TODO
 - [ ] set version to 2.0, and upload to garmin connect store
 - [ ] Cleaning code
 - [ ] Scaling graphics by screen-size: clock-size and place
