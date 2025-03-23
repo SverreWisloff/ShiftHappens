@@ -98,11 +98,11 @@ Dev
 ## Kalanfilter
 
 ### Resources
--[William Franklin](https://thekalmanfilter.com/)
+- [William Franklin](https://thekalmanfilter.com/)
 -
 
 # TODO
-- [ ] set version to 2.0, and upload to garmin connect store
+- [ ] Kalmanfilter
 - [ ] Cleaning code
 - [ ] Scaling graphics by screen-size: clock-size and place
 - [ ] Scaling graphics by screen-size: speed-plot

@@ -44,6 +44,12 @@ class Matrix
         }
         _matrix[i][j] = value;
     }
+    public function getValue(i, j) as Double {
+        if (i >= _rows || j >= _cols) {
+            throw new Exception("Index out of bounds");
+        }
+        return _matrix[i][j];
+    }
 
     public function addRow(row) as Void {
         if (_cols>0 && row.size() != _cols) {
@@ -62,9 +68,9 @@ class Matrix
         for (var i = 0; i < _rows; i++) {
             var row = [];
             for (var j = 0; j < _cols; j++) {
-                row.add(_matrix[i][j] + MatrixOther._matrix[i][j]);
+                row.add(_matrix[i][j] + MatrixOther.getValue(i,j));
             }
-            result._matrix.add(row);
+            result.addRow(row);
         }
         return result;
     }
@@ -74,16 +80,17 @@ class Matrix
             throw new Exception("Matrix dimensions must be the same");
         }
         var result = new Matrix();
-        result.initDimensions(_rows, MatrixOther.cols(), false);
-        for (var i = 0; i < _rows; i++) {
+        for (var i = 0; i < self.rows(); i++) {
+            var row = [];
             for (var j = 0; j < MatrixOther.cols(); j++) {
                 var sum = 0;
-                for (var k = 0; k < _cols; k++) {
-                    sum += _matrix[i][k] * MatrixOther._matrix[k][j];
+                for (var k = 0; k < MatrixOther.rows(); k++) {
+                    sum += _matrix[i][k] * MatrixOther.getValue(k,j);
                 }
-                result.setValue(i,j,sum);
+                row.add(sum);
             }
-        }
+            result.addRow(row);
+        }        
         return result;
     }
 
@@ -94,6 +101,18 @@ class Matrix
                 self.setValue(i,j,newValue);
             }
         }
+    }
+
+    public function matrixTranspose() as Matrix {
+        var result = new Matrix();
+        for (var i = 0; i < _cols; i++) {
+            var row = [];
+            for (var j = 0; j < _rows; j++) {
+                row.add(_matrix[j][i]);
+            }
+            result.addRow(row);
+        }
+        return result;
     }
 
     public function print(name as String) as Void {

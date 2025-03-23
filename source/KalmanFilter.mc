@@ -99,10 +99,21 @@ class KalmanFilter {
         x = Ax.matrixAdd(Bu);
         x.print("x");
 
-
         // Oppdaterer kovariansmatrisen
         // P = matrixAdd(matrixMultiply(matrixMultiply(A, P), matrixTranspose(A)), Q);
-        // TODO!!!!!!!
+        var AP = new Matrix();
+        AP = A.matrixMultiply(P);
+        AP.print("AP");
+
+        var At = A.matrixTranspose();
+        At.print("At");
+
+        var APAt = new Matrix();
+        APAt = AP.matrixMultiply(At);
+        APAt.print("APAt");
+
+        P = APAt.matrixAdd(Q);
+        P.print("P");
 
         return [x[0], x[1]];
     }
