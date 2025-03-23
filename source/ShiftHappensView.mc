@@ -26,14 +26,14 @@ class ShiftHappensView extends WatchUi.View {
         _ui.m_WindDirection = Application.Storage.getValue("WindDirection");
 
 var dt = 1.0;  // Time step
-var u_x = 0.0;  // Acceleration in x-direction
-var u_y = 0.0;  // Acceleration in y-direction
+var u_x = 0.1;  // Acceleration in x-direction
+var u_y = 0.1;  // Acceleration in y-direction
 var std_acc = 0.1;  // Process noise magnitude
 var x_std_meas = 0.5;  // Measurement noise standard deviation in x-direction
 var y_std_meas = 0.5;  // Measurement noise standard deviation in y-direction
 _kf = new KalmanFilter(dt, u_x, u_y, std_acc, x_std_meas, y_std_meas);
 //_kf.initialize(dt, u_x, u_y, std_acc, x_std_meas, y_std_meas);
-_kf.setAcceleration(0.1, 0.1);
+//_kf.setAcceleration(0.1, 0.1);
 
     }
 
@@ -115,7 +115,8 @@ _kf.setAcceleration(0.1, 0.1);
  		// Get COG & SOG from PositionInfo
 		if(_posnInfo!=null	){ 
 			_ui.m_COG_deg = reduse_deg((_posnInfo.heading)/Math.PI*180);
-            var measurement = [_posnInfo.lat, _posnInfo.lon];
+            var myLocation = _posnInfo.position.toDegrees();
+            var measurement = [myLocation[0], myLocation[1]];
             var predicted = _kf.predict();
             var updated = _kf.update(measurement);
             System.println("Predicted: " + predicted + ", Updated: " + updated);
