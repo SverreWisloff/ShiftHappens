@@ -75,6 +75,21 @@ class Matrix
         return result;
     }
 
+    public function matrixSubtract(MatrixOther) as Matrix {
+        if (_rows != MatrixOther.rows() || _cols != MatrixOther.cols()) {
+            throw new Exception("Matrix dimensions must be the same");
+        }
+        var result = new Matrix();
+        for (var i = 0; i < _rows; i++) {
+            var row = [];
+            for (var j = 0; j < _cols; j++) {
+                row.add(_matrix[i][j] - MatrixOther.getValue(i,j));
+            }
+            result.addRow(row);
+        }
+        return result;
+    }
+
     public function matrixMultiply(MatrixOther) as Matrix {
         if (_cols != MatrixOther.rows()) {
             throw new Exception("Matrix dimensions must be the same");
@@ -113,6 +128,30 @@ class Matrix
             result.addRow(row);
         }
         return result;
+    }
+
+    public function matrixInverse22() as Matrix {
+        if (_rows != 2 || _cols != 2) {
+            throw new Exception("Matrix must be square 2x2");
+        }
+
+        var result = new Matrix();
+        result.initDimensions(_rows, _cols, true);
+
+        // Assuming a is a 2x2 matrix for simplicity. Implementing general matrix inversion is complex.
+        var det = _matrix[0][0] * _matrix[1][1] - _matrix[0][1] * _matrix[1][0];
+
+        result.setValue(0,0, _matrix[1][1] / det);
+        result.setValue(1,0,-_matrix[0][1] / det);
+        result.setValue(0,1,-_matrix[1][0] / det);
+        result.setValue(1,1, _matrix[0][0] / det);
+
+        return result;
+    }
+
+    //TODO: Implement toString
+    public function toString()  as String {
+        return "Matrix";
     }
 
     public function print(name as String) as Void {

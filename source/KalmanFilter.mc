@@ -11,8 +11,24 @@ class KalmanFilter {
     var I;
     var x;  // Tilstandsvektor: x=[x,y, v_x,v_y], x,y = Posisjon, v_x,v_y = Hastighet 
     var u;  // Akselerasjon: u=[u_x, u_y]
+    public var _bInitPosSet=false;
+
+    function getVelocityKnot() {
+        var knot = Math.sqrt(Math.pow(x.getValue(2,0),2) + Math.pow(x.getValue(3,0),2)) * 1.94384;
+
+        return knot;
+    }
+
+    function getHeadingDeg() {
+        var heading = Math.atan2(x.getValue(2,0), x.getValue(3,0)) * 180.0 / Math.PI;
+        if (heading < 0) {
+            heading += 360.0;
+        }
+        return heading;
+    }
 
     function initialize(dt, u_x, u_y, std_acc, x_std_meas, y_std_meas) {
+        _bInitPosSet=false;
         // Define the 2x2 Identity matrix
 //        I = [[1, 0], 
 //             [0, 1]];
@@ -24,7 +40,7 @@ class KalmanFilter {
         x.addRow([0.0]);
         x.addRow([0.0]);
         x.addRow([0.0]);
-        x.print("x");
+//        x.print("x");
 
         // Define the state transition matrix A
         //[ [1  0 dt  0  ]
@@ -35,7 +51,7 @@ class KalmanFilter {
         A.initDimensions(4,4,true);
         A.setValue(0,2, dt);
         A.setValue(1,3, dt);
-        A.print("A");
+//        A.print("A");
 
         // Define the control input matrix B
         B = new Matrix();
@@ -43,31 +59,31 @@ class KalmanFilter {
         B.addRow([               0.0, Math.pow(dt,2)/2.0]);
         B.addRow([                dt,                0.0]);
         B.addRow([               0.0,                 dt]);
-        B.print("B");
+//        B.print("B");
 
         // Define the measurement mapping matrix
         //  H = [ [1.0, 0.0, 0.0, 0.0],
         //        [0.0, 1.0, 0.0, 0.0] ];
         H = new Matrix();
         H.initDimensions(2,4,true);
-        H.print("H");
+//        H.print("H");
 
         // Initial Process Noise Covariance
-        var Q = new Matrix();
+        Q = new Matrix();
         Q.addRow([Math.pow(dt,4)/4.0,                0.0, Math.pow(dt,3)/2.0,                0.0]);
         Q.addRow([               0.0, Math.pow(dt,4)/4.0,                  0, Math.pow(dt,3)/2.0]);
         Q.addRow([Math.pow(dt,3)/2.0,                0.0,     Math.pow(dt,2),                0.0]);
         Q.addRow([               0.0, Math.pow(dt,3)/2.0,                0.0,     Math.pow(dt,2)]);
-        Q.print("Q");
+//        Q.print("Q");
 
         Q.matrixMultiplyNumber(Math.pow(std_acc,2));
-        Q.print("Q");
+//        Q.print("Q");
 
         // Initial Measurement Noise Covariance
         R = new Matrix();
         R.addRow([Math.pow(x_std_meas,2),                    0.0]);
         R.addRow([                   0.0, Math.pow(y_std_meas,2)]);
-        R.print("R");
+//        R.print("R");
 
         // Initial Covariance Matrix
         //  P = [[1.0, 0.0, 0.0, 0.0],
@@ -76,13 +92,22 @@ class KalmanFilter {
         //      [0.0, 0.0, 0.0, 1.0]];
         P = new Matrix();
         P.initDimensions(4,4,true);
-        P.print("P");
+//        P.print("P");
         // Set the acceleration-vector
         u = new Matrix();
         u.addRow([u_x]);
         u.addRow([u_y]);
-        u.print("u");
+//        u.print("u");
     }
+
+    function setInitPos(lat, lon) {
+        var coord = latLonToWebMercator(lat, lon);
+        x.setValue(0,0, coord["x"]);
+        x.setValue(1,0, coord["y"]);
+        _bInitPosSet = true;
+
+    }
+
 
     // estimerer neste posisjon
     function predict() {
@@ -90,52 +115,101 @@ class KalmanFilter {
         // x = matrixAdd(matrixMultiply(A, x), matrixMultiply(B, u));
         var Ax = new Matrix();
         Ax = A.matrixMultiply(x);
-        Ax.print("Ax");
+//        Ax.print("Ax");
 
         var Bu = new Matrix();
         Bu = B.matrixMultiply(u);
-        Bu.print("Bu");
+//        Bu.print("Bu");
 
         x = Ax.matrixAdd(Bu);
-        x.print("x");
+//        x.print("x");
 
         // Oppdaterer kovariansmatrisen
         // P = matrixAdd(matrixMultiply(matrixMultiply(A, P), matrixTranspose(A)), Q);
         var AP = new Matrix();
         AP = A.matrixMultiply(P);
-        AP.print("AP");
+//        AP.print("AP");
 
         var At = A.matrixTranspose();
-        At.print("At");
+//        At.print("At");
 
         var APAt = new Matrix();
         APAt = AP.matrixMultiply(At);
-        APAt.print("APAt");
+//        APAt.print("APAt");
 
         P = APAt.matrixAdd(Q);
-        P.print("P");
+//        P.print("P");
 
-        return [x[0], x[1]];
+        return [x.getValue(0,0), x.getValue(1,0)];
     }
 
     // oppdaterer posisjonen basert på måling
-    function update(z) {
+    function update(zx, zy) {
         // S = HPH' + R
-        var S = matrixAdd(matrixMultiply(matrixMultiply(H, P), matrixTranspose(H)), R);
+        //var S = matrixAdd(matrixMultiply(matrixMultiply(H, P), matrixTranspose(H)), R);
+        var z = new Matrix();
+        z.addRow([zx]);
+        z.addRow([zy]);
+//        z.print("z");
+
+        var HP = new Matrix();
+        HP = H.matrixMultiply(P);
+//        HP.print("HP");
+
+        var Ht = H.matrixTranspose();
+//        Ht.print("Ht");
+
+        var HPHt = new Matrix();
+        HPHt = HP.matrixMultiply(Ht);
+//        HPHt.print("HPHt");
+
+        var S = HPHt.matrixAdd(R);
+//        S.print("S");
 
         // Calculate the Kalman Gain
-        var K = matrixMultiply(matrixMultiply(P, matrixTranspose(H)), matrixInverse(S));
+        //var K = matrixMultiply(matrixMultiply(P, matrixTranspose(H)), matrixInverse(S));
+        var PHt = new Matrix();       
+        PHt = P.matrixMultiply(Ht);
+//        PHt.print("PHt");
+
+        var Sinv = S.matrixInverse22();
+//        Sinv.print("Sinv");
+
+        var K = PHt.matrixMultiply(Sinv);
+//        K.print("K");
 
         // Update the estimate via z
-        x = matrixAdd(x, matrixMultiply(K, matrixSubtract(z, matrixMultiply(H, x))));
+        //x = matrixAdd(x, matrixMultiply(K, matrixSubtract(z, matrixMultiply(H, x))));
+        var Hx = H.matrixMultiply(x);
+//        Hx.print("Hx");
+
+        var zHx = z.matrixSubtract(Hx);
+//        zHx.print("zHx");
+
+        var KzHx = K.matrixMultiply(zHx);
+//        KzHx.print("KzHx");
+
+        x = x.matrixAdd(KzHx);
+//        x.print("x");
 
         // Update the error covariance
-        P = matrixMultiply(matrixSubtract(I, matrixMultiply(K, H)), P);
+        //P = matrixMultiply(matrixSubtract(I, matrixMultiply(K, H)), P);
+        var KH = K.matrixMultiply(H);
+//        KH.print("KH");
 
-        return [x[0], x[1]];
+        var I = new Matrix();
+        I.initDimensions(4,4,true);
+
+        var IKH = I.matrixSubtract(KH);
+//        IKH.print("IKH");
+
+        P = IKH.matrixMultiply(P);
+//        P.print("P");
+
+        return [x.getValue(0,0), x.getValue(1,0)];
     }
-
-
+}
+/*
     function matrixMultiplyNumber(a, multiplier) {
         var result = [];
         for (var i = 0; i < a.size(); i++) {
@@ -210,8 +284,6 @@ class KalmanFilter {
         ];
     }
 }
-
-/*
 
 // Example usage:
 var dt = 1;  // Time step

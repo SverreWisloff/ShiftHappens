@@ -28,12 +28,10 @@ class ShiftHappensView extends WatchUi.View {
 var dt = 1.0;  // Time step
 var u_x = 0.1;  // Acceleration in x-direction
 var u_y = 0.1;  // Acceleration in y-direction
-var std_acc = 0.1;  // Process noise magnitude
-var x_std_meas = 0.5;  // Measurement noise standard deviation in x-direction
-var y_std_meas = 0.5;  // Measurement noise standard deviation in y-direction
+var std_acc = 1.0;  // Process noise magnitude
+var x_std_meas = 5.0;  // Measurement noise standard deviation in x-direction
+var y_std_meas = 5.0;  // Measurement noise standard deviation in y-direction
 _kf = new KalmanFilter(dt, u_x, u_y, std_acc, x_std_meas, y_std_meas);
-//_kf.initialize(dt, u_x, u_y, std_acc, x_std_meas, y_std_meas);
-//_kf.setAcceleration(0.1, 0.1);
 
     }
 
@@ -112,23 +110,34 @@ _kf = new KalmanFilter(dt, u_x, u_y, std_acc, x_std_meas, y_std_meas);
         // Call the parent onUpdate function to redraw the layout
         View.onUpdate(dc);
 
- 		// Get COG & SOG from PositionInfo
-		if(_posnInfo!=null	){ 
-			_ui.m_COG_deg = reduse_deg((_posnInfo.heading)/Math.PI*180);
-            var myLocation = _posnInfo.position.toDegrees();
-            var measurement = [myLocation[0], myLocation[1]];
-            var predicted = _kf.predict();
-            var updated = _kf.update(measurement);
-            System.println("Predicted: " + predicted + ", Updated: " + updated);
-		} else {
-			_ui.m_COG_deg = 0;
-		}
-		if(_posnInfo!=null){
-            _ui.m_Speed_kn = _posnInfo.speed * 1.9438444924406;
-		} else {
-			_ui.m_Speed_kn = 0;
-		}
+        try {
 
+            // Get COG & SOG from PositionInfo
+            if(_posnInfo!=null	){ 
+                _ui.m_COG_deg = reduse_deg((_posnInfo.heading)/Math.PI* 180);
+                var myLocation = _posnInfo.position.toDegrees();
+                //var measurement = [myLocation[0], myLocation[1]];
+                if (!_kf._bInitPosSet){
+                    _kf.setInitPos(myLocation[0], myLocation[1]);
+                }
+                var coord = latLonToWebMercator(myLocation[0], myLocation[1]);
+                var predicted = _kf.predict();
+                var updated = _kf.update(coord["x"], coord["y"]);
+                var knot = _kf.getVelocityKnot();
+                var heading = _kf.getHeadingDeg();
+                System.println("Predicted=" + predicted + ", Updated=" + updated + ", Heading=" + heading + " knot:" + knot);
+            } else {
+                _ui.m_COG_deg = 0;
+            }
+            if(_posnInfo!=null){
+                _ui.m_Speed_kn = _posnInfo.speed * 1.9438444924406;
+            } else {
+                _ui.m_Speed_kn = 0;
+            }
+        }
+        catch (e) {
+            System.println("Error in KalmanFilter: " + e);
+        }
 		//Update Speed-History-array
 		if (_ui.m_Speed_kn>-0.000001 && _ui.m_Speed_kn<99.9){
 			_SpeedHistory.push(_ui.m_Speed_kn);
