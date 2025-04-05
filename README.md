@@ -51,6 +51,13 @@ Dev
 - [SunEclipticAnalog](https://github.com/SverreWisloff/SunEclipticAnalog?tab=readme-ov-file#notes-to-self-while-coding)
 - [SunFacing](https://github.com/SverreWisloff/SunFacing?tab=readme-ov-file#notes-to-self-while-coding)
 
+## Unit testing
+[Unit Testing](https://developer.garmin.com/connect-iq/core-topics/unit-testing/) docs.
+
+An [example](https://github.com/ferranpujolcamins/GarminApps/tree/main/BarrelTests/tests/Shared_IQ_1_4_0). 
+
+A nice [tutorial](https://starttorun.info/tutorial-create-connect-iq-unit-tests/).
+
 ## Ideas:
 - Storing sail-data to FIT-File (AWS, AWA)
 - Get wind-dir and wind-speed from ext wind-instrument
@@ -102,6 +109,8 @@ Dev
 -
 
 # TODO
+- [ ] Geodesy-calc
+- [ ] Geodesy-calc-unit-tests
 - [ ] Kalmanfilter
 - [ ] Cleaning code
 - [ ] Scaling graphics by screen-size: clock-size and place
