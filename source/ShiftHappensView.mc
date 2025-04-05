@@ -1,3 +1,4 @@
+import Toybox.Lang;
 import Toybox.Graphics;
 import Toybox.WatchUi;
 using Toybox.Application as App;
@@ -17,6 +18,7 @@ class ShiftHappensView extends WatchUi.View {
 	var _CogHistory   = new Dynamics(100, true);   // standard 120 (2 min)  
     var _posnInfo = null; 
     var _kf; 
+    var _transf;
 //    var m_COG_deg = 0;
 //    var m_Speed_kn = 0;
 
@@ -24,6 +26,7 @@ class ShiftHappensView extends WatchUi.View {
         View.initialize();
         _ui = new ShiftHappensUi();
         _ui.m_WindDirection = Application.Storage.getValue("WindDirection");
+
 
 var dt = 1.0;  // Time step
 var u_x = 0.1;  // Acceleration in x-direction
@@ -33,6 +36,7 @@ var x_std_meas = 5.0;  // Measurement noise standard deviation in x-direction
 var y_std_meas = 5.0;  // Measurement noise standard deviation in y-direction
 _kf = new KalmanFilter(dt, u_x, u_y, std_acc, x_std_meas, y_std_meas);
 
+_transf = new Transf();
     }
 
     // Read param from app-property
@@ -110,6 +114,11 @@ _kf = new KalmanFilter(dt, u_x, u_y, std_acc, x_std_meas, y_std_meas);
         // Call the parent onUpdate function to redraw the layout
         View.onUpdate(dc);
 
+        //DEBUG TODO
+        //cosh(1.0d as Double); 
+        //var t = new Transf();
+        //var coordinate = t.Geodetisk2Gausisk_trad(60.0d as Double, 10.0d as Double);
+
         try {
 
             // Get COG & SOG from PositionInfo
@@ -120,7 +129,9 @@ _kf = new KalmanFilter(dt, u_x, u_y, std_acc, x_std_meas, y_std_meas);
                 if (!_kf._bInitPosSet){
                     _kf.setInitPos(myLocation[0], myLocation[1]);
                 }
-                var coord = latLonToWebMercator(myLocation[0], myLocation[1]);
+                var B = DEG_TO_RAD(myLocation[0]); // Bredde i radianer
+                var L = DEG_TO_RAD(myLocation[1]); // Lengde i radianer
+                var coord = _transf.Geodetisk2Gausisk_trad(B, L);
                 var predicted = _kf.predict();
                 var updated = _kf.update(coord["x"], coord["y"]);
                 var knot = _kf.getVelocityKnot();

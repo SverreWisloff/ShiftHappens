@@ -2,16 +2,18 @@ using Toybox.System;
 using Toybox.WatchUi;
 
 class KalmanFilter {
-    var A;  // Tilstandstransisjonsmatrise: Brukes til å forutsi neste tilstand basert på nåværende posisjon og hastighet.
-    var B;  // Kontrollmatrise: Brukes til å forutsi neste tilstand basert på akselerasjon u_x, u_y.
-    var H;  // Målingsmatrise: Brukes til å konvertere tilstand til måling.
-    var Q;  // Prosessstøykovarians: Usikkerhet i prosessen (akselerasjon).
-    var R;  // Målingsstøykovarians: Usikkerhet i målingene (posisjon).
-    var P;
-    var I;
-    var x;  // Tilstandsvektor: x=[x,y, v_x,v_y], x,y = Posisjon, v_x,v_y = Hastighet 
-    var u;  // Akselerasjon: u=[u_x, u_y]
-    public var _bInitPosSet=false;
+        var A;  // Tilstandstransisjonsmatrise: Brukes til å forutsi neste tilstand basert på nåværende posisjon og hastighet.
+        var B;  // Kontrollmatrise: Brukes til å forutsi neste tilstand basert på akselerasjon u_x, u_y.
+        var H;  // Målingsmatrise: Brukes til å konvertere tilstand til måling.
+        var Q;  // Prosessstøykovarians: Usikkerhet i prosessen (akselerasjon).
+        var R;  // Målingsstøykovarians: Usikkerhet i målingene (posisjon).
+        var P;
+        var I;
+        var x;  // Tilstandsvektor: x=[x,y, v_x,v_y], x,y = Posisjon, v_x,v_y = Hastighet 
+        var u;  // Akselerasjon: u=[u_x, u_y]
+        public var _bInitPosSet=false;
+        private var _lat0;
+        private var _lon0;
 
     function getVelocityKnot() {
         var knot = Math.sqrt(Math.pow(x.getValue(2,0),2) + Math.pow(x.getValue(3,0),2)) * 1.94384;
@@ -29,6 +31,8 @@ class KalmanFilter {
 
     function initialize(dt, u_x, u_y, std_acc, x_std_meas, y_std_meas) {
         _bInitPosSet=false;
+        _lat0 = 0.0;
+        _lon0 = 0.0;
         // Define the 2x2 Identity matrix
 //        I = [[1, 0], 
 //             [0, 1]];
@@ -101,7 +105,14 @@ class KalmanFilter {
     }
 
     function setInitPos(lat, lon) {
-        var coord = latLonToWebMercator(lat, lon);
+        //var coord = latLonToWebMercator(lat, lon);
+        var lat0 = 0.0; // Reference latitude
+        var lon0 = 0.0; // Reference longitude
+        
+        lat0 = (Math.round(lat / 1000.0) * 1000.0) - 1000.0;
+        lon0 = (Math.round(lon / 1000.0) * 1000.0) - 1000.0;
+        
+        var coord = latLonToEquirectangular(lat, lon, lat0, lon0);
         x.setValue(0,0, coord["x"]);
         x.setValue(1,0, coord["y"]);
         _bInitPosSet = true;
