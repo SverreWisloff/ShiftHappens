@@ -71,20 +71,20 @@ function sinh( x )
 }
 
 class Transf {
-    // WGS84 ellipsoid parametre
-    private var m_dStoreHalvakse = 6378137.0 as Double;
-    private var	m_dFlattrykkning = 1.0 / 298.257222101 as Double;
+    // GRS80 ellipsoid parametre
+    private var m_dStoreHalvakse = 6378137.0d as Double;
+    private var	m_dFlattrykkning = 1.0d / 298.257222101d as Double;
 
     // UTM parametre
-    private var	m_dSkalafaktor=0.9996 as Double; 
-	private var	m_dAddN=0.0 as Double;
-	private var	m_dAddE=500000.0 as Double; 
+    private var	m_dSkalafaktor=0.9996d as Double; 
+	private var	m_dAddN=0.0d as Double;
+	private var	m_dAddE=500000.0d as Double; 
 
     // UTM 32V
     private var	m_Sentralmeridian=DEG_TO_RAD(9.0) as Double;
 
     public function GetLilleHalvakse() as Double {
-        return( m_dStoreHalvakse * (1.0 - m_dFlattrykkning));
+        return( m_dStoreHalvakse * (1.0d - m_dFlattrykkning));
     }
 
     // Henter f�rste eksentrisitet
@@ -142,38 +142,97 @@ class Transf {
         return( Eps2 );
     }
 
+    function Geodetisk2Kartesisk( dB as Double, dL as Double, dHEll as Double ) as Double {
+        var a  = m_dStoreHalvakse;   // a : lang halvakse
+        var f  = m_dFlattrykkning;   // f : flattrykning
+
+        var b  = a - a*f;
+        var N  = GetNormalKrRad( dB );
+        var p  = ( N + dHEll ) * Math.cos( dB );
+        
+        var dX = p * Math.cos( dL );
+        var dY = p * Math.sin( dL );
+        var dZ = ( Math.pow( b/a, 2 ) * N + dHEll ) * Math.sin( dB );
+
+        return { "x" => dX, "y" => dY, "z" => dZ };
+    }
+
+    function Kartesisk2Geodetisk( dX as Double, dY as Double, dZ as Double ) as Double {
+        var a    = m_dStoreHalvakse;   // a : lang halvakse
+        var f    = m_dFlattrykkning;   // f : flattrykning
+	    var b    = a - a*f;
+	    var e2   = Math.pow( GetEllipseEks1(), 2 );
+	    var e__2 = Math.pow( a/b, 2 ) - 1.0d;
+	    var p    = Math.sqrt( ( dX*dX ) + ( dY*dY ) );
+	    var t    = Math.atan2( dZ*a, p*b );
+	    var c3t  = Math.pow( Math.cos( t ), 3 );
+	    var s3t  = Math.pow( Math.sin( t ), 3 );
+	    var dB   = Math.atan2( dZ + e__2*b*s3t , p - e2*a*c3t );
+	    var dL   = Math.atan2( dY, dX );
+	    var N    = GetNormalKrRad( dB );
+	    var dHEll = p/Math.cos( dB ) - N;
+        return { "B" => dB, "L" => dL, "h" => dHEll };
+    }
+
+/*
+void Kartesisk2Geodetisk( double dX, double dY, double dZ, CVGDatum *pDatum, double *pdB, double *pdL, double *pdHEll )
+{
+	double  a, f, b, e2, e__2, p, t, c3t, s3t, N;
+	
+	assert(pDatum->SjekkDatum()); // Har du husket � definere datum f�r du bruker det?
+	
+	a    = pDatum->GetStoreHalvakse();
+	f    = pDatum->GetFlattrykkning();
+	b    = a - a*f;
+	e2   = sqr( pDatum->GetEllipseEks1() );
+	e__2 = sqr( a/b ) - 1.0;
+	p    = sqrt( sqr( dX ) + sqr( dY ) );
+	t    = atan2( dZ*a, p*b );
+	c3t  = pow_i( cos( t ), 3 );
+	s3t  = pow_i( sin( t ), 3 );
+	
+	*pdB = atan2( dZ + e__2*b*s3t , p - e2*a*c3t );
+	*pdL = atan2( dY, dX );
+	
+	N  = pDatum->GetNormalKrRad( *pdB );
+	*pdHEll = p/cos( *pdB ) - N;
+}*/
+
+
+
+
     // Fra geografiske koordinater til gaussiske
     // HYPERBOLIC FUNCTION FOR THE GAUSSIAN PROJECTION 
     function Geodetisk2Gausisk_hyp( dB as Double, dL as Double ) as Double {
         var a  = m_dStoreHalvakse;   // a : lang halvakse
         var f  = m_dFlattrykkning;   // f : flattrykning
         var l0 = m_Sentralmeridian; // l0: tangeringsmeridian
-        var e  = Math.sqrt(f*(2.0-f));	                    // Eccentricity
+        var e  = Math.sqrt(f*(2.0d-f));	                    // Eccentricity
         
         var df2 = f*f;  // pow(f,2)
         var df3 = df2*f;// pow(f,3)
 
         dL = Kvadrant( dL-l0, -2 );          // dL : lengdeforskjell
         
-        var b0 = a * ( 1 - f/2.0 + df2/16.0 + df3/32.0 );
-        var b1 = a * ( f/4 - df2/6.0 - df3*11.0/384.0 );
-        var b2 = a * ( df2*13.0/192.0 - df3*79.0/1920.0 );
-        var b3 = a * ( df3*61.0/1920.0 );
+        var b0 = a * ( 1.0d - f/2.0d + df2/16.0d + df3/32.0d );
+        var b1 = a * ( f/4.0d - df2/6.0d - df3*11.0d/384.0d );
+        var b2 = a * ( df2*13.0d/192.0d - df3*79.0d/1920.0d );
+        var b3 = a * ( df3*61.0d/1920.0d );
         
         var sB = Math.sin(dB);
         var sL = Math.sin(dL);
-        var w = (Math.atan( Math.tan(dB/2.0 + Math.PI/4.0)*Math.pow((1.0-e*sB)/(1.0+e*sB),e/2.0)) - Math.PI/4.0)*2.0;
+        var w = (Math.atan( Math.tan(dB/2.0d + Math.PI/4.0d)*Math.pow((1.0-e*sB)/(1.0d+e*sB),e/2.0d)) - Math.PI/4.0d)*2.0d;
 	
         var u = Math.atan2(Math.tan(w),Math.cos(dL));
         var cw = Math.cos(w);
-        var v = Math.ln( (1.0+cw*sL)/(1.0-cw*sL) )/2.0;
+        var v = Math.ln( (1.0d+cw*sL)/(1.0d-cw*sL) )/2.0d;
         
-        var d2u = 2.0*u;
-        var d2v = 2.0*v;
-        var d4u = 4.0*u;
-        var d4v = 4.0*v;
-        var d6u = 6.0*u;
-        var d6v = 6.0*v;
+        var d2u = 2.0d*u;
+        var d2v = 2.0d*v;
+        var d4u = 4.0d*u;
+        var d4v = 4.0d*v;
+        var d6u = 6.0d*u;
+        var d6v = 6.0d*v;
         
         var dX = b0*u + b1*Math.sin(d2u)*Math.cosh(d2v) + b2*Math.sin(d4u)*Math.cosh(d4v) + b3*Math.sin(d6u)*Math.cosh(d6v);
         var dY = b0*v + b1*Math.cos(d2u)*Math.sinh(d2v) + b2*Math.cos(d4u)*Math.sinh(d4v) + b3*Math.cos(d6u)*Math.sinh(d6v);
@@ -198,7 +257,7 @@ class Transf {
         var Eps2 = GetEpsilon_2( dB );
         
         var dX =   B + ll/2.0d * N*sfi*cfi
-            + ll*ll/24.0 * N*sfi*c3fi * ( 5.0d - t2fi + 9.0d*Eps2 + 4.0d*Math.pow( Eps2, 2 ) )
+            + ll*ll/24.0d * N*sfi*c3fi * ( 5.0d - t2fi + 9.0d*Eps2 + 4.0d*Math.pow( Eps2, 2 ) )
             + lll*lll/720.0d * N*sfi*c5fi * ( 61.0d - 58.0d*t2fi + t4fi );
         
         var dY =   l*N*cfi
@@ -209,14 +268,81 @@ class Transf {
     }
 
     function Gausisk2Geodetisk( dX, dY){
+/*
+	int Err=0;
+	double dB, dL;
+	CVGDatum *pDatum;
+	
+	assert(pProjeksjon->SjekkProjeksjon()); // Har du husket � defnere projeksjon f�r du bruker det?
+	
+	Err = Gausisk2Geodetisk( dN, dE, pProjeksjon, &dB, &dL );
+	pDatum = pProjeksjon;
+	Geodetisk2Kartesisk( dB, dL, dHEll, pDatum, pdX, pdY, pdZ );
 
+*/
     }
 
     function Gausisk2TransMercator( dXg, dYg){
-        
+/*
+	int     Err=0, nVGLKoorSys=1;
+	double  k, N0, E0, N, E;
+	double  dFi;
+	
+	assert(pProjeksjon->SjekkProjeksjon());  // Har du husket � defnere projeksjon f�r du bruker det?
+	
+	k  = pProjeksjon->GetSkalafaktor();
+	N0 = pProjeksjon->GetAddN();
+	E0 = pProjeksjon->GetAddE();
+	dFi= pProjeksjon->GetRotasj();           // i radianer
+	
+	N = dXg * k  +  N0;                      // M�lestokk p� sentralmer og Translasjon
+	E = dYg * k  +  E0;
+	
+	if(dFi!=0.0)
+	{
+		Err = Roter2D( N, E, dFi, &N, &E );      // Rotasjon
+		if ( Err != 0 )  return( Err );
+	}
+	
+	if ( pProjeksjon->GetRetning1Akse() == 2 )  N = -N;   // Snur akser
+	if ( pProjeksjon->GetRetning2Akse() == 2 )  E = -E;
+	
+	*pdXutm = N;
+	*pdYutm = E;
+
+*/        
     }
 
     function TransMercator2Gausisk( dXutm, dYutm){
-        
+/*
+	int     Err=0, nVGLKoorSys=1;
+	double  k, N0, E0, N, E, dFi;
+	
+	assert(pProjeksjon->SjekkProjeksjon());         // Har du husket � defnere projeksjon f�r du bruker det?
+	
+	k  = pProjeksjon->GetSkalafaktor();
+	N0 = pProjeksjon->GetAddN();
+	E0 = pProjeksjon->GetAddE();
+	dFi= pProjeksjon->GetRotasj();                  // i radianer
+	
+	if ( pProjeksjon->GetRetning1Akse() == 2 )  dXutm = -dXutm;  // Snur akser
+	if ( pProjeksjon->GetRetning2Akse() == 2 )  dYutm = -dYutm;
+	
+	if(dFi!=0.0)
+	{
+		Err = Roter2D( dXutm, dYutm, -dFi, &N, &E );    // Rotasjon
+		if ( Err != 0 )  return( Err );
+	}
+	else
+	{
+		N = dXutm;
+		E = dYutm;
+	}
+	
+	*pdXg = ( N-N0 ) / k;                            // M�lestokk p� sentralmer og Translasjon
+	*pdYg = ( E-E0 ) / k;
+
+
+*/
     }
 }
