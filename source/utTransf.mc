@@ -174,7 +174,7 @@ function utKartesisk2Geodetisk(logger as Logger) as Boolean {
 }
 
 (:test)
-function utGeodetisk2Gausisk_trad(logger as Logger) as Boolean {
+function utGeodetisk2TransMercator_trad(logger as Logger) as Boolean {
     var dLatDeg= 60.0d; // Bredde
     var dLonDeg= 10.0d; // Lengde
 
@@ -183,19 +183,32 @@ function utGeodetisk2Gausisk_trad(logger as Logger) as Boolean {
 
     var tran = new Transf(); 
 
-    var coord = tran.Geodetisk2Gausisk_trad(dLatRad,dLonRad);
-    logger.debug("b= " + dLatDeg + " l= " + dLonDeg);
-    logger.debug("x= " + coord["x"] + " y= " + coord["y"]);
+    var coordGausisk = tran.Geodetisk2Gausisk_trad(dLatRad,dLonRad);
+    var dXg = coordGausisk["x"];
+    var dYg = coordGausisk["y"];
+    
+    var coordUTM = tran.Gausisk2TransMercator( dXg, dYg);
+    var dN = coordUTM["N"];
+    var dE = coordUTM["E"];
 
-    // UTM
-    // E  555776.26675230
-    // N 6651832.73531065
+    var tolerance = 0.2; // Litt dårlig!
+    var NN = 6651832.73531065d; // expected y-UTM coordinate
+    var EE = 555776.26675230d;  // expected x-UTM coordinate
+    var bNcomp = doubleCompare(dN, NN, tolerance);
+    var bEcomp = doubleCompare(dE, EE, tolerance);
 
-    return (false); // returning true indicates pass, false indicates failure
+    logger.debug("dN = " + dN.format("%.4f") + " Ndiff=" + (dN-NN).format("%.4f") + " bNcomp = " + bNcomp.toString());
+    logger.debug("dE = " + dE.format("%.4f") + " Ediff=" + (dE-EE).format("%.4f") + " bEcomp = " + bEcomp.toString());
+
+    if (bNcomp && bEcomp) {
+        return true; // Values are considered equal
+    }
+
+    return false; // returning true indicates pass, false indicates failure
 }
 
 (:test)
-function utGeodetisk2Gausisk_hyp(logger as Logger) as Boolean {
+function utGeodetisk2TransMercator_hyp(logger as Logger) as Boolean {
     var dLatDeg= 60.0d; // Bredde
     var dLonDeg= 10.0d; // Lengde
 
@@ -204,19 +217,26 @@ function utGeodetisk2Gausisk_hyp(logger as Logger) as Boolean {
 
     var tran = new Transf(); 
 
-    var coord = tran.Geodetisk2Gausisk_hyp(dLatRad,dLonRad);
-    logger.debug("b= " + dLatDeg + " l= " + dLonDeg);
-    logger.debug("x= " + coord["x"] + " y= " + coord["y"]);
+    var coordGausisk = tran.Geodetisk2Gausisk_hyp(dLatRad,dLonRad);
+    var dXg = coordGausisk["x"];
+    var dYg = coordGausisk["y"];
+    
+    var coordUTM = tran.Gausisk2TransMercator( dXg, dYg);
+    var dN = coordUTM["N"];
+    var dE = coordUTM["E"];
 
-// TESTDATA
-// B  60.000
-// L  10.000 
-// UTM
-// E  555776.26675230
-// N 6651832.73531065
+    var tolerance = 0.2; // Litt dårlig!
+    var NN = 6651832.73531065d; // expected y-UTM coordinate
+    var EE = 555776.26675230d;  // expected x-UTM coordinate
+    var bNcomp = doubleCompare(dN, NN, tolerance);
+    var bEcomp = doubleCompare(dE, EE, tolerance);
 
-// results:
-// x= 6654494.720887 y= 55798.584905
+    logger.debug("dN = " + dN.format("%.4f") + " Ndiff=" + (dN-NN).format("%.4f") + " bNcomp = " + bNcomp.toString());
+    logger.debug("dE = " + dE.format("%.4f") + " Ediff=" + (dE-EE).format("%.4f") + " bEcomp = " + bEcomp.toString());
 
-    return (false); // returning true indicates pass, false indicates failure
+    if (bNcomp && bEcomp) {
+        return true; // Values are considered equal
+    }
+
+    return false; // returning true indicates pass, false indicates failure
 }

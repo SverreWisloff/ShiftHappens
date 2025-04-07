@@ -83,6 +83,18 @@ class Transf {
     // UTM 32V
     private var	m_Sentralmeridian=DEG_TO_RAD(9.0) as Double;
 
+    function initialize(){
+        // Constructor
+        m_dStoreHalvakse = 6378137.0d as Double; // GRS80 ellipsoid parametre
+        m_dFlattrykkning = 1.0d / 298.257222101d as Double; // GRS80 ellipsoid parametre
+
+        m_dSkalafaktor=0.9996d as Double; 
+        m_dAddN=0.0d as Double;
+        m_dAddE=500000.0d as Double; 
+
+        m_Sentralmeridian=DEG_TO_RAD(9.0) as Double; // UTM 32V
+    }
+
     public function GetLilleHalvakse() as Double {
         return( m_dStoreHalvakse * (1.0d - m_dFlattrykkning));
     }
@@ -174,32 +186,6 @@ class Transf {
         return { "B" => dB, "L" => dL, "h" => dHEll };
     }
 
-/*
-void Kartesisk2Geodetisk( double dX, double dY, double dZ, CVGDatum *pDatum, double *pdB, double *pdL, double *pdHEll )
-{
-	double  a, f, b, e2, e__2, p, t, c3t, s3t, N;
-	
-	assert(pDatum->SjekkDatum()); // Har du husket � definere datum f�r du bruker det?
-	
-	a    = pDatum->GetStoreHalvakse();
-	f    = pDatum->GetFlattrykkning();
-	b    = a - a*f;
-	e2   = sqr( pDatum->GetEllipseEks1() );
-	e__2 = sqr( a/b ) - 1.0;
-	p    = sqrt( sqr( dX ) + sqr( dY ) );
-	t    = atan2( dZ*a, p*b );
-	c3t  = pow_i( cos( t ), 3 );
-	s3t  = pow_i( sin( t ), 3 );
-	
-	*pdB = atan2( dZ + e__2*b*s3t , p - e2*a*c3t );
-	*pdL = atan2( dY, dX );
-	
-	N  = pDatum->GetNormalKrRad( *pdB );
-	*pdHEll = p/cos( *pdB ) - N;
-}*/
-
-
-
 
     // Fra geografiske koordinater til gaussiske
     // HYPERBOLIC FUNCTION FOR THE GAUSSIAN PROJECTION 
@@ -264,7 +250,7 @@ void Kartesisk2Geodetisk( double dX, double dY, double dZ, CVGDatum *pDatum, dou
             + lll/6.0d * N*c3fi * ( 1.0d - t2fi + Eps2 )
             + lll*ll/120.0d * N*c5fi * ( 5.0d - 18.0d*t2fi + t4fi );
         
-            return { "x" => dX, "y" => dY };
+        return { "x" => dX, "y" => dY };
     }
 
     function Gausisk2Geodetisk( dX, dY){
@@ -283,34 +269,20 @@ void Kartesisk2Geodetisk( double dX, double dY, double dZ, CVGDatum *pDatum, dou
     }
 
     function Gausisk2TransMercator( dXg, dYg){
-/*
-	int     Err=0, nVGLKoorSys=1;
-	double  k, N0, E0, N, E;
-	double  dFi;
-	
-	assert(pProjeksjon->SjekkProjeksjon());  // Har du husket � defnere projeksjon f�r du bruker det?
-	
-	k  = pProjeksjon->GetSkalafaktor();
-	N0 = pProjeksjon->GetAddN();
-	E0 = pProjeksjon->GetAddE();
-	dFi= pProjeksjon->GetRotasj();           // i radianer
-	
-	N = dXg * k  +  N0;                      // M�lestokk p� sentralmer og Translasjon
-	E = dYg * k  +  E0;
-	
-	if(dFi!=0.0)
-	{
-		Err = Roter2D( N, E, dFi, &N, &E );      // Rotasjon
-		if ( Err != 0 )  return( Err );
-	}
-	
-	if ( pProjeksjon->GetRetning1Akse() == 2 )  N = -N;   // Snur akser
-	if ( pProjeksjon->GetRetning2Akse() == 2 )  E = -E;
-	
-	*pdXutm = N;
-	*pdYutm = E;
-
-*/        
+        var N = dXg * m_dSkalafaktor  +  m_dAddN;                      // M�lestokk p� sentralmer og Translasjon
+        var E = dYg * m_dSkalafaktor  +  m_dAddE;
+        
+        //if(dFi!=0.0){
+        //    Roter2D( N, E, dFi, &N, &E );      // Rotasjon
+        //}
+        
+        //if ( pProjeksjon->GetRetning1Akse() == 2 )  N = -N;   // Snur akser
+        //if ( pProjeksjon->GetRetning2Akse() == 2 )  E = -E;
+        
+        var dXutm = N;
+        var dYutm = E;
+  
+        return { "N" => dXutm, "E" => dYutm };
     }
 
     function TransMercator2Gausisk( dXutm, dYutm){

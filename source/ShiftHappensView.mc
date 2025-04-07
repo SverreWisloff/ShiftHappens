@@ -126,17 +126,29 @@ _transf = new Transf();
                 _ui.m_COG_deg = reduse_deg((_posnInfo.heading)/Math.PI* 180);
                 var myLocation = _posnInfo.position.toDegrees();
                 //var measurement = [myLocation[0], myLocation[1]];
-                if (!_kf._bInitPosSet){
-                    _kf.setInitPos(myLocation[0], myLocation[1]);
-                }
+
                 var B = DEG_TO_RAD(myLocation[0]); // Bredde i radianer
                 var L = DEG_TO_RAD(myLocation[1]); // Lengde i radianer
-                var coord = _transf.Geodetisk2Gausisk_trad(B, L);
+                var coordGausisk = _transf.Geodetisk2Gausisk_trad(B,L);
+                var dXg = coordGausisk["x"];
+                var dYg = coordGausisk["y"];
+                
+                var coordUTM = _transf.Gausisk2TransMercator( dXg, dYg);
+                var dN = coordUTM["N"];
+                var dE = coordUTM["E"];
+
+                if (!_kf._bInitPosSet){
+                    _kf.setInitPos(dN, dE);
+                }
+
                 var predicted = _kf.predict();
-                var updated = _kf.update(coord["x"], coord["y"]);
+                var updated = _kf.update(dN,dE);
                 var knot = _kf.getVelocityKnot();
                 var heading = _kf.getHeadingDeg();
-                System.println("Predicted=" + predicted + ", Updated=" + updated + ", Heading=" + heading + " knot:" + knot);
+                var strMeas = "Measurement: [" + dN.format("%.1f") + " , " + dE.format("%.1f") + "] ,";
+                var strPred = "Predicted: [" + predicted[0].format("%.1f") + " , " + predicted[1].format("%.1f") + "], ";
+                var strUpdt = "Updated: [" + updated[0].format("%.1f") + " , " + updated[1].format("%.1f") + "], ";
+                System.println(strMeas + strPred + strUpdt + "Heading=" + heading + " knot:" + knot);
             } else {
                 _ui.m_COG_deg = 0;
             }
