@@ -94,6 +94,10 @@ class KalmanFilter {
         P = new Matrix();
         P.initDimensions(4,4,true);
 //        P.print("P");
+        
+        I = new Matrix();
+        I.initDimensions(4,4,true);        
+
         // Set the acceleration-vector
         u = new Matrix();
         u.addRow([u_x]);
@@ -205,9 +209,6 @@ class KalmanFilter {
         //P = matrixMultiply(matrixSubtract(I, matrixMultiply(K, H)), P);
         var KH = K.matrixMultiply(H);
 //        KH.print("KH");
-
-        var I = new Matrix();
-        I.initDimensions(4,4,true);
 
         var IKH = I.matrixSubtract(KH);
 //        IKH.print("IKH");
