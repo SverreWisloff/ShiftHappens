@@ -29,9 +29,9 @@ class Matrix
             var row = [];
             for (var j = 0; j < cols; j++) {
                 if (bUnit && i == j) {
-                    row.add(1.0);
+                    row.add(1.0d);
                 } else {
-                    row.add(0.0);
+                    row.add(0.0d);
                 }
             }
             _matrix.add(row);
@@ -142,8 +142,8 @@ class Matrix
         var det = _matrix[0][0] * _matrix[1][1] - _matrix[0][1] * _matrix[1][0];
 
         result.setValue(0,0, _matrix[1][1] / det);
-        result.setValue(1,0,-_matrix[0][1] / det);
-        result.setValue(0,1,-_matrix[1][0] / det);
+        result.setValue(0,1,-_matrix[0][1] / det);
+        result.setValue(1,0,-_matrix[1][0] / det);
         result.setValue(1,1, _matrix[0][0] / det);
 
         return result;
@@ -161,16 +161,17 @@ class Matrix
                 strRow = name + " = [ [";
             }
             else {
-                strRow = "      [";
+                strRow = "          [";
             }
             for (var j = 0; j < _cols; j++) {
-                strRow += _matrix[i][j] + " ";
+                strRow += _matrix[i][j].format("%.9f") + " ";
             }
             if (i < _rows-1) {
                 strRow += " ]";
             }
             else {
                 strRow += " ] ]";
+                strRow += " (" + _cols + "x" + _rows + ")";
             }
             System.println(strRow);
         }
