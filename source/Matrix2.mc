@@ -12,6 +12,8 @@ import Toybox.Lang;
 // matrix[4*(2-1)+3] = 7
 // matrix[cols*(row-1)+col] = value
 
+// Matrix2: storing multidimensional arrays in linear storage (row-major order)
+
 
 // TODO: https://en.wikipedia.org/wiki/Row-_and_column-major_order
 
