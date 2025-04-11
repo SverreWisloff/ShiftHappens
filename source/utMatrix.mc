@@ -8,6 +8,71 @@ import Toybox.Test;
 // ===================================================
 
 (:test)
+function utMatrixInitDimensionsFalse(logger as Logger) as Boolean {
+    // Test the initDimensions method of the Matrix class
+    var matrix = new Matrix();
+    matrix.initDimensions(3, 4, false); // Initialize a 3x4 matrix
+
+    // Check if the matrix has the correct dimensions
+    if (matrix.rows() != 3) {
+        logger.debug("Expected 3 rows but got " + matrix.rows());
+        return false; // Test failed
+    }
+    if (matrix.cols() != 4) {
+        logger.debug("Expected 4 cols but got " + matrix.cols());
+        return false; // Test failed
+    }
+
+    // Check if all values are initialized to 0.0
+    for (var i = 0; i < 3; i++) {
+        for (var j = 0; j < 4; j++) {
+            if (!doubleCompare(matrix.getValue(i, j), 0.0d, 0.000000000000000001)) {
+                logger.debug("Expected value at (" + i + ", " + j + ") is 0.0d but got " + matrix.getValue(i, j).format("%.9f"));
+                return false; // Test failed
+            }
+        }
+    }
+
+    return true; // returning true indicates pass, false indicates failure
+}
+
+(:test)
+function utMatrixInitDimensionsTrue(logger as Logger) as Boolean {
+    // Test the initDimensions method of the Matrix class
+    var matrix = new Matrix();
+    matrix.initDimensions(3, 3, true); // Initialize a 3x4 matrix
+
+    // Check if the matrix has the correct dimensions
+    if (matrix.rows() != 3) {
+        logger.debug("Expected 3 rows but got " + matrix.rows());
+        return false; // Test failed
+    }
+    if (matrix.cols() != 3) {
+        logger.debug("Expected 3 cols but got " + matrix.cols());
+        return false; // Test failed
+    }
+
+    // Check if all values are initialized to 0.0
+    for (var i = 0; i < 3; i++) {
+        for (var j = 0; j < 3; j++) {
+            if (i == j) {
+                if (!doubleCompare(matrix.getValue(i, j), 1.0d, 0.000000000000000001)) {
+                    logger.debug("Expected value at (" + i + ", " + j + ") is 1.0d but got " + matrix.getValue(i, j).format("%.9f"));
+                    return false; // Test failed
+                }
+            } else {
+                if (!doubleCompare(matrix.getValue(i, j), 0.0d, 0.000000000000000001)) {
+                    logger.debug("Expected value at (" + i + ", " + j + ") is 0.0d but got " + matrix.getValue(i, j).format("%.9f"));
+                    return false; // Test failed
+                }
+            }
+        }
+    }
+
+    return true; // returning true indicates pass, false indicates failure
+}
+
+(:test)
 function utSetGetValue(logger as Logger) as Boolean {
     // Test the setValue and getValue methods of the Matrix class
     var matrix = new Matrix();
