@@ -112,6 +112,7 @@ _Include the project's license information._
 - [ ] Get wind-dir and wind-speed from ext wind-instrument
 - [ ] Computing target speed
 - [ ] Supporting Devices: enduro, fr965, fr955, fr945, fr945lte, fr265, fr265s
+- [x] Set upper limit for zoom of speed plot
 - [x] Scaling graphics by screen-size: boat-size 
 - [x] Draw wind-arrow
 - [x] Draw record indicator gray if REC has been turned on >1 min

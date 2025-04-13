@@ -295,18 +295,28 @@ class Dynamics
 		var dataMin = me.Min();
 		var dataMax = me.Max();
 
-		if (_PlotMinData < dataMin  ){
-			_PlotMinData = _PlotMinData + 0.05;
-		} else {
-			_PlotMinData = dataMin; 
+		if ( (dataMax-dataMin) < 1.4)
+		{	// Alle data har neste samme fart. Setter nedre og øvre akse til 1.4 kn - Upper limit for zoom of speed plot
+			var gjennomsnittsfart = (dataMin + dataMax)/2.0;
+			_PlotMinData = gjennomsnittsfart - 0.7;
+			_PlotMaxData = gjennomsnittsfart + 0.7;
 		}
+		else
+		{	// Normalsituasjon. Justerer nedre og øvre akse
+			if (_PlotMinData < dataMin  ){
+				_PlotMinData = _PlotMinData + 0.05;
+			} else {
+				_PlotMinData = dataMin; 
+			}
 
-		if ( (_PlotMaxData > dataMax)  ){
-			_PlotMaxData = _PlotMaxData - 0.05;
-		} else {
-			_PlotMaxData = dataMax;
+			if ( (_PlotMaxData > dataMax)  ){
+				_PlotMaxData = _PlotMaxData - 0.05;
+			} else {
+				_PlotMaxData = dataMax;
+			}
 		}
-
+		//System.println("Dynamics::drawPlot() - Min=" + _PlotMinData.format("%.1f") + " Max=" + _PlotMaxData.format("%.1f") + " Max-Min=" + (_PlotMaxData-_PlotMinData).format("%.1f"));
+		
 		//Draw a help line to nearest long
 		var DisplayAbsicce = (_PlotMaxData + _PlotMinData ) / 2.0;
 		DisplayAbsicce = DisplayAbsicce.toLong();
