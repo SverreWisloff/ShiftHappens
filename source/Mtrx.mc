@@ -3,22 +3,22 @@ import Toybox.Lang;
 //import Toybox.Math;
 
 // Matrix:
-// [ 1  2  3  4 
-//   5  6  7  8]
+// [ 1  2  3  4                  ij=[ 00 01 02 03 ]
+//   5  6  7  8]                      10 11 12 13 ]
 // cols=4, rows=2
 // Array representation:
-// [ 1  2  3  4  5  6  7  8]
-// col=3, row=2 => value=7
-// matrix[4*(2-1)+3] = 7
-// matrix[cols*(row-1)+col] = value
+// [ 1  2  3  4  5  6  7  8]     ij=[ 00 01 02 03 10 11 12 13 ]
+// i=2(row), j=3(col)  => value=7
+// matrix[4*(1)+3] = 7
+// matrix[cols*i+j] = value
 
-// Matrix2: storing multidimensional arrays in linear storage (row-major order)
+// Mtrx: Matrix-class storing multidimensional arrays in linear storage (row-major order)
 
 
 // TODO: https://en.wikipedia.org/wiki/Row-_and_column-major_order
 
 
-class Matrix2 
+class Mtrx 
 {
     private var _rows as Number;
     private var _cols as Number;
@@ -44,6 +44,9 @@ class Matrix2
         for (var i = 0; i < rows*cols; i++) {
             _matrix.add(0.0d);
             //TODO: check if bUnit is true and set the diagonal to 1.0d
+            if (bUnit && i % (cols+1) == 0) {
+                _matrix[i] = 1.0d;
+            }
         }
     }
 
@@ -51,13 +54,13 @@ class Matrix2
         if (i >= _rows || j >= _cols) {
             throw new Exception("Index out of bounds");
         }
-        //_matrix[_cols*(row-1)+col] = value;
+        _matrix[_cols*i+j] = value;
     }
     public function getValue(i, j) as Double {
         if (i >= _rows || j >= _cols) {
             throw new Exception("Index out of bounds");
         }
-        return _matrix[i][j];
+        return _matrix[_cols*i+j];
     }
 
     public function addRow(row) as Void {
@@ -173,7 +176,7 @@ class Matrix2
                 strRow = "      [";
             }
             for (var j = 0; j < _cols; j++) {
-                strRow += _matrix[i][j] + " ";
+                strRow += self.getValue(i,j) + " ";
             }
             if (i < _rows-1) {
                 strRow += " ]";

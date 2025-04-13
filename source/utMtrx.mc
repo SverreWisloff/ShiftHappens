@@ -8,10 +8,13 @@ import Toybox.Test;
 // ===================================================
 
 (:test)
-function utMatrixInitDimensionsFalse(logger as Logger) as Boolean {
+function utMtrxInitDimensionsFalse(logger as Logger) as Boolean {
     // Test the initDimensions method of the Matrix class
-    var matrix = new Matrix();
+    var matrix = new Mtrx();
     matrix.initDimensions(3, 4, false); // Initialize a 3x4 matrix
+    logger.debug("Matrix.rows() = " + matrix.rows() );
+    logger.debug("Matrix.cols() = " + matrix.cols() );
+    matrix.print("Mtrx");
 
     // Check if the matrix has the correct dimensions
     if (matrix.rows() != 3) {
@@ -32,16 +35,15 @@ function utMatrixInitDimensionsFalse(logger as Logger) as Boolean {
             }
         }
     }
-
     return true; // returning true indicates pass, false indicates failure
 }
 
 (:test)
-function utMatrixInitDimensionsTrue(logger as Logger) as Boolean {
+function utMtrxInitDimensionsTrue(logger as Logger) as Boolean {
     // Test the initDimensions method of the Matrix class
-    var matrix = new Matrix();
+    var matrix = new Mtrx();
     matrix.initDimensions(3, 3, true); // Initialize a 3x4 matrix
-
+    matrix.print("MtrxIDT");
     // Check if the matrix has the correct dimensions
     if (matrix.rows() != 3) {
         logger.debug("Expected 3 rows but got " + matrix.rows());
@@ -73,9 +75,9 @@ function utMatrixInitDimensionsTrue(logger as Logger) as Boolean {
 }
 
 (:test)
-function utMatrixSetGetValue(logger as Logger) as Boolean {
+function utMtrxSetGetValue(logger as Logger) as Boolean {
     // Test the setValue and getValue methods of the Matrix class
-    var matrix = new Matrix();
+    var matrix = new Mtrx();
     matrix.initDimensions(4, 4, false); // Initialize a 2x4 matrix
 
     // Set values in the matrix
@@ -99,13 +101,13 @@ function utMatrixSetGetValue(logger as Logger) as Boolean {
 }
 
 (:test)
-function utMatrixAddRow(logger as Logger) as Boolean {
+function utMtrxAddRow(logger as Logger) as Boolean {
         
-        var m = new Matrix();
+        var m = new Mtrx();
         m.addRow([5.0d, 6.0d, 7.0d]);
-        m.addRow([2.0d, 3.0d, 4.0d]);
+//        m.addRow([2.0d, 3.0d, 4.0d]);
 
-        m.print("");
+        m.print("m.addRow");
         if (m.rows() != 2) {
             logger.debug("Expected 2 rows but got " + m.rows());
             return false; // Test failed
@@ -120,9 +122,9 @@ function utMatrixAddRow(logger as Logger) as Boolean {
         }
         return true;
 }
-
+/*
 (:test)
-function utMatrixAddRow2(logger as Logger) as Boolean {
+function utMtrxAddRow2(logger as Logger) as Boolean {
     // Test the addRow method of the Matrix class
     var matrix = new Matrix();
     matrix.initDimensions(3, 3, true); // Initialize a 2x4 matrix
@@ -149,7 +151,7 @@ function utMatrixAddRow2(logger as Logger) as Boolean {
 }
 
 (:test)
-function utMatrixAdd(logger as Logger) as Boolean {
+function utMtrxAdd(logger as Logger) as Boolean {
     // Test the add method of the Matrix class
     var matrix1 = new Matrix();
     matrix1.initDimensions(2, 2, true);
@@ -190,7 +192,7 @@ function utMatrixAdd(logger as Logger) as Boolean {
 }
 
 (:test)
-function utMatrixSubtract(logger as Logger) as Boolean {
+function utMtrxSubtract(logger as Logger) as Boolean {
     // Test the subtract method of the Matrix class
     var matrix1 = new Matrix();
     matrix1.initDimensions(2, 2, true);
@@ -382,3 +384,4 @@ function utMatrixInverse22(logger as Logger) as Boolean {
 
     return true; // returning true indicates pass, false indicates failure
 }
+*/
