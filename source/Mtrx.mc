@@ -67,9 +67,14 @@ class Mtrx
         if (_cols>0 && row.size() != _cols) {
             throw new Exception("Row has wrong length");
         }
-        _matrix.add(row);
+        else if (_cols==0) {
+            _cols = row.size();
+        }
+
+        for (var i = 0; i < row.size(); i++) {
+            _matrix.add(row[i]);
+        }
         _rows++;
-        _cols = row.size();
     }
 
     public function matrixAdd(MatrixOther) as Matrix {
@@ -80,7 +85,7 @@ class Mtrx
         for (var i = 0; i < _rows; i++) {
             var row = [];
             for (var j = 0; j < _cols; j++) {
-                row.add(_matrix[i][j] + MatrixOther.getValue(i,j));
+                row.add(self.getValue(i,j) + MatrixOther.getValue(i,j));
             }
             result.addRow(row);
         }
@@ -95,7 +100,7 @@ class Mtrx
         for (var i = 0; i < _rows; i++) {
             var row = [];
             for (var j = 0; j < _cols; j++) {
-                row.add(_matrix[i][j] - MatrixOther.getValue(i,j));
+                row.add(self.getValue(i,j) - MatrixOther.getValue(i,j));
             }
             result.addRow(row);
         }
@@ -112,7 +117,7 @@ class Mtrx
             for (var j = 0; j < MatrixOther.cols(); j++) {
                 var sum = 0;
                 for (var k = 0; k < MatrixOther.rows(); k++) {
-                    sum += _matrix[i][k] * MatrixOther.getValue(k,j);
+                    sum += self.getValue(i,k) * MatrixOther.getValue(k,j);
                 }
                 row.add(sum);
             }
@@ -124,7 +129,7 @@ class Mtrx
     public function matrixMultiplyNumber(Number) as Void {
         for (var i = 0; i < _rows; i++) {
             for (var j = 0; j < _cols; j++) {
-                var newValue = _matrix[i][j] * Number;
+                var newValue = self.getValue(i,j) * Number;
                 self.setValue(i,j,newValue);
             }
         }
@@ -135,7 +140,7 @@ class Mtrx
         for (var i = 0; i < _cols; i++) {
             var row = [];
             for (var j = 0; j < _rows; j++) {
-                row.add(_matrix[j][i]);
+                row.add(self.getValue(j,i));
             }
             result.addRow(row);
         }
@@ -151,12 +156,12 @@ class Mtrx
         result.initDimensions(_rows, _cols, true);
 
         // Assuming a is a 2x2 matrix for simplicity. Implementing general matrix inversion is complex.
-        var det = _matrix[0][0] * _matrix[1][1] - _matrix[0][1] * _matrix[1][0];
+        var det = self.getValue(0,0) * self.getValue(1,1) - self.getValue(0,1) * self.getValue(1,0);
 
-        result.setValue(0,0, _matrix[1][1] / det);
-        result.setValue(1,0,-_matrix[0][1] / det);
-        result.setValue(0,1,-_matrix[1][0] / det);
-        result.setValue(1,1, _matrix[0][0] / det);
+        result.setValue(0,0, self.getValue(1,1) / det);
+        result.setValue(0,1,-self.getValue(0,1) / det);
+        result.setValue(1,0,-self.getValue(1,0) / det);
+        result.setValue(1,1, self.getValue(0,0) / det);
 
         return result;
     }
@@ -173,7 +178,7 @@ class Mtrx
                 strRow = name + " = [ [";
             }
             else {
-                strRow = "      [";
+                strRow = "          [";
             }
             for (var j = 0; j < _cols; j++) {
                 strRow += self.getValue(i,j) + " ";

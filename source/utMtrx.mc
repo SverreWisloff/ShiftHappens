@@ -105,7 +105,7 @@ function utMtrxAddRow(logger as Logger) as Boolean {
         
         var m = new Mtrx();
         m.addRow([5.0d, 6.0d, 7.0d]);
-//        m.addRow([2.0d, 3.0d, 4.0d]);
+        m.addRow([2.0d, 3.0d, 4.0d]);
 
         m.print("m.addRow");
         if (m.rows() != 2) {
@@ -122,11 +122,11 @@ function utMtrxAddRow(logger as Logger) as Boolean {
         }
         return true;
 }
-/*
+
 (:test)
 function utMtrxAddRow2(logger as Logger) as Boolean {
     // Test the addRow method of the Matrix class
-    var matrix = new Matrix();
+    var matrix = new Mtrx();
     matrix.initDimensions(3, 3, true); // Initialize a 2x4 matrix
 
     // Create a new row to add
@@ -153,7 +153,7 @@ function utMtrxAddRow2(logger as Logger) as Boolean {
 (:test)
 function utMtrxAdd(logger as Logger) as Boolean {
     // Test the add method of the Matrix class
-    var matrix1 = new Matrix();
+    var matrix1 = new Mtrx();
     matrix1.initDimensions(2, 2, true);
     matrix1.setValue(0, 0, 1.0d);
     matrix1.setValue(0, 1, 2.0d);
@@ -161,7 +161,7 @@ function utMtrxAdd(logger as Logger) as Boolean {
     matrix1.setValue(1, 1, 4.0d);
     matrix1.print("matrix1");
 
-    var matrix2 = new Matrix();
+    var matrix2 = new Mtrx();
     matrix2.initDimensions(2, 2, false);
     matrix2.setValue(0, 0, 5.0d);
     matrix2.setValue(0, 1, 6.0d);
@@ -194,7 +194,7 @@ function utMtrxAdd(logger as Logger) as Boolean {
 (:test)
 function utMtrxSubtract(logger as Logger) as Boolean {
     // Test the subtract method of the Matrix class
-    var matrix1 = new Matrix();
+    var matrix1 = new Mtrx();
     matrix1.initDimensions(2, 2, true);
     matrix1.setValue(0, 0, 1.0d);
     matrix1.setValue(0, 1, 2.0d);
@@ -202,7 +202,7 @@ function utMtrxSubtract(logger as Logger) as Boolean {
     matrix1.setValue(1, 1, 4.0d);
     matrix1.print("matrix1");
 
-    var matrix2 = new Matrix();
+    var matrix2 = new Mtrx();
     matrix2.initDimensions(2, 2, false);
     matrix2.setValue(0, 0, 5.0d);
     matrix2.setValue(0, 1, 6.0d);
@@ -233,9 +233,9 @@ function utMtrxSubtract(logger as Logger) as Boolean {
 }
 
 (:test)
-function utMatrixMultiply(logger as Logger) as Boolean {
+function utMtrxMultiply(logger as Logger) as Boolean {
     // Test the multiply method of the Matrix class
-    var matrix1 = new Matrix();
+    var matrix1 = new Mtrx();
     matrix1.initDimensions(2, 3, true);
     matrix1.setValue(0, 0, 1.0d);
     matrix1.setValue(0, 1, 2.0d);
@@ -245,7 +245,7 @@ function utMatrixMultiply(logger as Logger) as Boolean {
     matrix1.setValue(1, 2, 6.0d);
     matrix1.print("matrix1");
 
-    var matrix2 = new Matrix();
+    var matrix2 = new Mtrx();
     matrix2.initDimensions(3, 2, false);
     matrix2.setValue(0, 0, 7.0d);
     matrix2.setValue(0, 1, 8.0d);
@@ -278,9 +278,9 @@ function utMatrixMultiply(logger as Logger) as Boolean {
 }
 
 (:test)
-function utMatrixMultiplyNumber(logger as Logger) as Boolean {
+function utMtrxMultiplyNumber(logger as Logger) as Boolean {
     // Test the multiplyNumber method of the Matrix class
-    var matrix = new Matrix();
+    var matrix = new Mtrx();
     matrix.initDimensions(2, 2, true);
     matrix.setValue(0, 0, 1.0d);
     matrix.setValue(0, 1, 2.0d);
@@ -312,8 +312,8 @@ function utMatrixMultiplyNumber(logger as Logger) as Boolean {
 }
 
 (:test)
-function utMatrixTranspose(logger as Logger) as Boolean {
-    var matrix1 = new Matrix();
+function utMtrxTranspose(logger as Logger) as Boolean {
+    var matrix1 = new Mtrx();
     matrix1.initDimensions(2, 3, true);
     matrix1.setValue(0, 0, 1.0d);
     matrix1.setValue(0, 1, 2.0d);
@@ -353,9 +353,9 @@ function utMatrixTranspose(logger as Logger) as Boolean {
 }
 
 (:test)
-function utMatrixInverse22(logger as Logger) as Boolean {
+function utMtrxInverse22(logger as Logger) as Boolean {
     // Test the inverse method of the Matrix class for a 2x2 matrix
-    var matrix = new Matrix();
+    var matrix = new Mtrx();
     matrix.initDimensions(2, 2, true);
     matrix.setValue(0, 0, 4.0d);
     matrix.setValue(0, 1, 7.0d);
@@ -384,4 +384,3 @@ function utMatrixInverse22(logger as Logger) as Boolean {
 
     return true; // returning true indicates pass, false indicates failure
 }
-*/
